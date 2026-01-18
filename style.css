@@ -11,13 +11,17 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    min-height: -webkit-fill-available; /* iOS Safari fix */
     background: #1a1a2e;
     color: #333;
     padding: 1rem;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); /* Safe area for notched devices */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     position: relative;
     overflow-x: hidden;
+    touch-action: pan-y; /* Allow vertical scrolling, prevent horizontal */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
 .background-image {
@@ -48,6 +52,7 @@ body {
     text-align: center;
     background: rgba(255, 255, 255, 0.95);
     padding: 2rem 1.5rem;
+    padding: max(2rem, env(safe-area-inset-top)) max(1.5rem, env(safe-area-inset-right)) max(2rem, env(safe-area-inset-bottom)) max(1.5rem, env(safe-area-inset-left));
     border-radius: 15px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
     width: 100%;
@@ -56,6 +61,10 @@ body {
     position: relative;
     z-index: 2;
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); /* Safari support */
+    overflow-y: auto;
+    max-height: calc(100vh - 2rem);
+    max-height: calc(100dvh - 2rem); /* Dynamic viewport height for mobile */
 }
 
 /* Reset Button */
@@ -157,12 +166,13 @@ button {
     border-radius: 10px;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-    min-height: 44px;
+    min-height: 48px; /* Minimum touch target size for mobile */
     min-width: 120px;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
     box-shadow: 0 4px 15px rgba(44, 62, 80, 0.3);
+    -webkit-touch-callout: none; /* Disable callout on iOS */
 }
 
 button:hover {
@@ -521,11 +531,15 @@ button:active {
     left: 0;
     width: 100%;
     height: 100%;
+    height: 100dvh; /* Dynamic viewport height for mobile */
     background: rgba(0, 0, 0, 0.9);
     z-index: 1000;
     justify-content: center;
     align-items: center;
     padding: 1rem;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    overflow: hidden;
+    touch-action: none; /* Prevent scrolling while scanning */
 }
 
 .scanner-modal.active {
@@ -538,7 +552,11 @@ button:active {
     padding: 1.5rem;
     width: 100%;
     max-width: 500px;
+    max-height: 90vh;
+    max-height: 90dvh;
     position: relative;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .scanner-header {
@@ -557,8 +575,10 @@ button:active {
     background: #e74c3c;
     color: white;
     border: none;
-    width: 35px;
-    height: 35px;
+    min-width: 44px; /* Minimum touch target */
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     font-size: 1.2rem;
     cursor: pointer;
@@ -648,12 +668,16 @@ button:active {
     left: 0;
     width: 100%;
     height: 100%;
+    height: 100dvh; /* Dynamic viewport height for mobile */
     background: rgba(0, 0, 0, 0.85);
     z-index: 1500;
     justify-content: center;
     align-items: center;
     padding: 1rem;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     animation: fadeIn 0.3s ease;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .rock-info-modal.active {
@@ -817,12 +841,16 @@ button:active {
     left: 0;
     width: 100%;
     height: 100%;
+    height: 100dvh; /* Dynamic viewport height for mobile */
     background: rgba(0, 0, 0, 0.9);
     z-index: 3000;
     justify-content: center;
     align-items: center;
     padding: 1rem;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     animation: fadeIn 0.3s ease;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .welcome-warning-modal.active {
@@ -943,6 +971,66 @@ button:active {
     transform: translateY(0) scale(0.98);
     box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
     animation: none;
+}
+
+/* Mobile specific optimizations */
+@media (max-width: 767px) {
+    body {
+        padding: 0.5rem;
+    }
+    
+    .container {
+        padding: 1.5rem 1rem;
+        max-width: 95%;
+        max-height: calc(100dvh - 1rem);
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    p {
+        font-size: 0.95rem;
+    }
+    
+    button {
+        min-height: 48px; /* Minimum touch target size */
+        font-size: 1rem;
+        padding: 1rem 1.5rem;
+    }
+    
+    .reset-btn {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
+        max-width: 44px;
+        max-height: 44px;
+        top: 0.5rem;
+        left: 0.5rem;
+    }
+    
+    .scanner-modal {
+        padding: 0.5rem;
+    }
+    
+    .scanner-content {
+        padding: 1rem;
+    }
+    
+    .rock-info-content,
+    .welcome-warning-content {
+        padding: 1.5rem 1rem;
+        max-width: 95%;
+    }
+    
+    .rock-slot {
+        min-height: 120px;
+    }
+    
+    .theme-image {
+        max-height: 200px;
+    }
 }
 
 /* Tablet and larger screens */
