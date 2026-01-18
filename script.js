@@ -403,11 +403,17 @@ function openScanner() {
     // Initialize QR Scanner
     qrScanner = new Html5Qrcode("qr-reader");
     
+    // Get viewport dimensions for responsive QR box
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const qrBoxSize = Math.min(viewportWidth * 0.8, viewportHeight * 0.5, 300);
+    
     qrScanner.start(
         { facingMode: "environment" }, // Use back camera
         {
             fps: 10,
-            qrbox: { width: 250, height: 250 }
+            qrbox: { width: qrBoxSize, height: qrBoxSize },
+            aspectRatio: 1.0
         },
         (decodedText, decodedResult) => {
             // Successfully scanned
