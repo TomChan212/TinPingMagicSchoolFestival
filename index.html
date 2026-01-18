@@ -15,6 +15,7 @@
     <div class="container">
         <button class="reset-btn" id="resetBtn">重置</button>
         <div class="image-container">
+            <div class="particles-main" id="particlesMain"></div>
             <img src="pandora.png" alt="Pandora" class="theme-image" id="pandoraBox">
             <img src="justbox.png" alt="收集布袋" class="theme-image" id="bagImageMain" style="display: none;">
         </div>
@@ -70,6 +71,20 @@
             <div class="rock-info-buttons">
                 <button class="rock-info-confirm-btn" id="rockInfoConfirmBtn">確認</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Welcome Warning Modal -->
+    <div class="welcome-warning-modal" id="welcomeWarningModal">
+        <div class="welcome-warning-content">
+            <h2>⚠️ 重要提示</h2>
+            <p class="warning-message">
+                請<strong>不要關閉此標籤頁</strong>，否則您將<strong>失去所有進度</strong>並需要重新開始！
+            </p>
+            <p class="warning-submessage">
+                所有收集的物品都保存在瀏覽器標籤頁中，關閉標籤頁將導致數據丟失。
+            </p>
+            <button class="welcome-warning-confirm-btn" id="welcomeWarningConfirmBtn">我明白了</button>
         </div>
     </div>
 
