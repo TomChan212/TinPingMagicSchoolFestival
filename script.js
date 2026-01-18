@@ -162,6 +162,9 @@ const openBagBtn = document.getElementById('openBagBtn');
 const backBtn = document.getElementById('backBtn');
 const bagImageMain = document.getElementById('bagImageMain');
 const resetBtn = document.getElementById('resetBtn');
+const particlesMain = document.getElementById('particlesMain');
+const welcomeWarningModal = document.getElementById('welcomeWarningModal');
+const welcomeWarningConfirmBtn = document.getElementById('welcomeWarningConfirmBtn');
 
 // Load collected rocks from localStorage
 let collectedRocks = JSON.parse(localStorage.getItem('collectedRocks')) || [];
@@ -268,6 +271,8 @@ function resetGame() {
         // Clear localStorage
         localStorage.setItem('collectedRocks', JSON.stringify([]));
         localStorage.setItem('collectedDistractions', JSON.stringify([]));
+        // Also clear welcome warning flag so it shows again after reset
+        localStorage.removeItem('hasSeenWelcomeWarning');
         
         // Reset UI
         initializeRocks();
@@ -540,6 +545,9 @@ function openBag() {
     if (pandoraBox) pandoraBox.style.display = 'none';
     if (bagImageMain) bagImageMain.style.display = 'block';
     
+    // Create particles for the main image container
+    createParticlesMain();
+    
     // Update title and message
     if (greeting) greeting.textContent = '收集布袋';
     if (message) message.textContent = '以下是已收集的物品';
@@ -570,6 +578,9 @@ function closeBag() {
     // Restore pandora.png in image-container
     if (pandoraBox) pandoraBox.style.display = 'block';
     if (bagImageMain) bagImageMain.style.display = 'none';
+    
+    // Clear particles from main image container
+    if (particlesMain) particlesMain.innerHTML = '';
     
     // Restore original title and message
     if (greeting) greeting.textContent = '潘多拉盒子';
@@ -605,6 +616,32 @@ function createParticles() {
     }
 }
 
+// Create particle effect for main image container (collected page)
+function createParticlesMain() {
+    if (!particlesMain) return;
+    
+    particlesMain.innerHTML = '';
+    
+    for (let i = 0; i < 15; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        // Position particles more spread out around the bag
+        const angle = (i / 15) * Math.PI * 2; // Distribute in a circle
+        const radius = 30 + Math.random() * 20; // Random radius between 30-50%
+        const centerX = 50; // Center of container
+        const centerY = 50;
+        
+        const x = centerX + Math.cos(angle) * radius;
+        const y = centerY + Math.sin(angle) * radius;
+        
+        particle.style.left = x + '%';
+        particle.style.top = y + '%';
+        particle.style.animationDelay = Math.random() * 3 + 's';
+        particle.style.animationDuration = (Math.random() * 1.5 + 2) + 's';
+        particlesMain.appendChild(particle);
+    }
+}
+
 // Open bag button
 if (openBagBtn) {
     openBagBtn.addEventListener('click', openBag);
@@ -615,9 +652,34 @@ if (backBtn) {
     backBtn.addEventListener('click', closeBag);
 }
 
+// Show welcome warning on first visit
+function showWelcomeWarning() {
+    // Check if warning has been shown before
+    const hasSeenWarning = localStorage.getItem('hasSeenWelcomeWarning');
+    
+    if (!hasSeenWarning && welcomeWarningModal) {
+        welcomeWarningModal.classList.add('active');
+    }
+}
+
+// Close welcome warning
+function closeWelcomeWarning() {
+    if (welcomeWarningModal) {
+        welcomeWarningModal.classList.remove('active');
+        // Mark as seen
+        localStorage.setItem('hasSeenWelcomeWarning', 'true');
+    }
+}
+
 // Initialize on page load
 initializeRocks();
 createParticles();
+showWelcomeWarning();
+
+// Welcome warning confirm button
+if (welcomeWarningConfirmBtn) {
+    welcomeWarningConfirmBtn.addEventListener('click', closeWelcomeWarning);
+}
 
 // Add smooth transition to greeting
 greeting.style.transition = 'transform 0.2s ease';
