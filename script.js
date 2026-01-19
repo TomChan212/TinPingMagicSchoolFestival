@@ -143,6 +143,7 @@ const DISTRACTION_ITEMS = [
 const greeting = document.getElementById('greeting');
 const message = document.getElementById('message');
 const button = document.getElementById('clickButton');
+const buttonCollection = document.getElementById('clickButtonCollection');
 const rocksGrid = document.getElementById('rocksGrid');
 const scannerModal = document.getElementById('scannerModal');
 const closeScanner = document.getElementById('closeScanner');
@@ -257,7 +258,7 @@ function updateProgress() {
 function checkBoxOpening() {
     if (collectedRocks.length === 6) {
         pandoraBox.classList.add('box-open');
-        message.textContent = '恭喜！潘多拉盒子已打開！';
+        message.textContent = '恭喜！魔法盒子已打開！';
         // Keep the collect button visible
         button.style.display = 'block';
         openBoxButton.style.display = 'block';
@@ -292,7 +293,7 @@ function resetGame() {
             pandoraBox.classList.remove('box-open');
         }
         if (greeting) {
-            greeting.textContent = '潘多拉盒子';
+            greeting.textContent = '魔法盒子';
         }
         if (message) {
             message.textContent = '集齊魔法石便可把盒子打開';
@@ -760,6 +761,10 @@ function openBag() {
     if (greeting) greeting.textContent = '收集布袋';
     if (message) message.textContent = '以下是已收集的物品';
     
+    // Hide main collect button and show collection view button
+    if (button) button.style.display = 'none';
+    if (buttonCollection) buttonCollection.style.display = 'block';
+    
     // Check if there are collected rocks
     const h3Element = rocksContent.querySelector('h3');
             const totalCollected = collectedRocks.length + collectedDistractions.length;
@@ -791,8 +796,12 @@ function closeBag() {
     if (particlesMain) particlesMain.innerHTML = '';
     
     // Restore original title and message
-    if (greeting) greeting.textContent = '潘多拉盒子';
+    if (greeting) greeting.textContent = '魔法盒子';
     if (message) message.textContent = '集齊魔法石便可把盒子打開';
+    
+    // Show main collect button and hide collection view button
+    if (button) button.style.display = 'block';
+    if (buttonCollection) buttonCollection.style.display = 'none';
 }
 
 // Create particle effect
@@ -903,4 +912,4 @@ if (welcomeWarningConfirmBtn) {
 // Add smooth transition to greeting
 greeting.style.transition = 'transform 0.2s ease';
 
-console.log('潘多拉盒子網站已載入！');
+console.log('魔法盒子網站已載入！');
