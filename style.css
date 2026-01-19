@@ -103,16 +103,16 @@ body {
     color: #1a1a2e;
     border: none;
     padding: 0;
-    font-size: 0.75rem;
-    border-radius: 6px;
+    font-size: 0.95rem;
+    border-radius: 8px;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-    min-height: 40px;
-    max-width: 40px;
-    max-height: 40px;
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    min-height: 50px;
+    max-width: 50px;
+    max-height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -155,16 +155,16 @@ body {
     color: #1a1a2e;
     border: none;
     padding: 0;
-    font-size: 0.75rem;
-    border-radius: 6px;
+    font-size: 0.95rem;
+    border-radius: 8px;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-    min-height: 40px;
-    max-width: 40px;
-    max-height: 40px;
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    min-height: 50px;
+    max-width: 50px;
+    max-height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1462,14 +1462,27 @@ button:active {
     }
     
     .reset-btn {
-        width: 44px;
-        height: 44px;
-        min-width: 44px;
-        min-height: 44px;
-        max-width: 44px;
-        max-height: 44px;
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+        min-height: 50px;
+        max-width: 50px;
+        max-height: 50px;
         top: 0.5rem;
         left: 0.5rem;
+        font-size: 0.95rem;
+    }
+    
+    .achievement-btn {
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+        min-height: 50px;
+        max-width: 50px;
+        max-height: 50px;
+        top: 0.5rem;
+        right: 0.5rem;
+        font-size: 0.95rem;
     }
     
     .scanner-modal {

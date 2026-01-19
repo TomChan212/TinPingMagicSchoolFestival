@@ -530,9 +530,42 @@ function handleScannedCode(scannedText) {
 }
 
 // Event Listeners
-button.addEventListener('click', function() {
-    // Allow scanning even after collecting all rocks (for distraction items)
-    openScanner();
+if (button) {
+    button.addEventListener('click', function() {
+        // Allow scanning even after collecting all rocks (for distraction items)
+        openScanner();
+    });
+}
+
+// Collection view button (繼續收集) - Bind event when button is shown
+function bindContinueCollectButton() {
+    const btn = document.getElementById('clickButtonCollection');
+    if (btn) {
+        // Remove any existing listeners by cloning the element
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+        
+        // Add event listener to the new button
+        newBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('繼續收集 button clicked');
+            // Allow scanning even after collecting all rocks (for distraction items)
+            openScanner();
+        });
+    }
+}
+
+// Also use event delegation as backup
+document.addEventListener('click', function(e) {
+    // Check if the clicked element is the continue collect button
+    if (e.target && e.target.id === 'clickButtonCollection') {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('繼續收集 button clicked via delegation');
+        // Allow scanning even after collecting all rocks (for distraction items)
+        openScanner();
+    }
 });
 
 closeScanner.addEventListener('click', closeScannerModal);
@@ -763,7 +796,11 @@ function openBag() {
     
     // Hide main collect button and show collection view button
     if (button) button.style.display = 'none';
-    if (buttonCollection) buttonCollection.style.display = 'block';
+    if (buttonCollection) {
+        buttonCollection.style.display = 'block';
+        // Bind event listener when button is shown
+        bindContinueCollectButton();
+    }
     
     // Check if there are collected rocks
     const h3Element = rocksContent.querySelector('h3');
