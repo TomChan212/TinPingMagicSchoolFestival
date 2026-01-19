@@ -708,17 +708,88 @@ function checkAchievementUnlock() {
     }
 }
 
+// Create celebration effect (confetti and fireworks)
+function createCelebrationEffect() {
+    const celebrationContainer = document.getElementById('celebrationEffect');
+    if (!celebrationContainer) return;
+    
+    // Clear any existing effects
+    celebrationContainer.innerHTML = '';
+    
+    // Create confetti
+    const confettiColors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7', '#a29bfe'];
+    const confettiCount = 100;
+    
+    for (let i = 0; i < confettiCount; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.backgroundColor = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+        confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        confetti.style.animationDelay = Math.random() * 0.5 + 's';
+        celebrationContainer.appendChild(confetti);
+    }
+    
+    // Create fireworks at multiple positions
+    const fireworkPositions = [
+        { x: 20, y: 30 },
+        { x: 50, y: 25 },
+        { x: 80, y: 30 },
+        { x: 30, y: 50 },
+        { x: 70, y: 50 },
+        { x: 50, y: 70 }
+    ];
+    
+    fireworkPositions.forEach((pos, index) => {
+        setTimeout(() => {
+            createFirework(pos.x, pos.y, celebrationContainer);
+        }, index * 200);
+    });
+    
+    // Clean up after animation
+    setTimeout(() => {
+        celebrationContainer.innerHTML = '';
+    }, 5000);
+}
+
+// Create a single firework
+function createFirework(x, y, container) {
+    const firework = document.createElement('div');
+    firework.className = 'firework';
+    firework.style.left = x + '%';
+    firework.style.top = y + '%';
+    
+    const fireworkColors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7', '#a29bfe', '#ffd32a', '#ff6348'];
+    
+    // Create particles
+    for (let i = 1; i <= 12; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'firework-particle';
+        particle.style.backgroundColor = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
+        firework.appendChild(particle);
+    }
+    
+    container.appendChild(firework);
+    
+    // Remove firework after animation
+    setTimeout(() => {
+        if (firework.parentNode) {
+            firework.parentNode.removeChild(firework);
+        }
+    }, 2000);
+}
+
 // Show achievement unlocked notification
 function showAchievementUnlocked(name, image, description) {
     if (!achievementUnlockedModal || !unlockedAchievementName || !unlockedAchievementImage || !unlockedAchievementDescription) return;
+    
+    // Show celebration effect immediately
+    createCelebrationEffect();
     
     unlockedAchievementName.textContent = name;
     unlockedAchievementImage.src = image;
     unlockedAchievementImage.alt = name;
     unlockedAchievementDescription.textContent = description;
-    
-    // Trigger celebration effect (confetti/fireworks)
-    createCelebrationEffect();
     
     // Show modal
     achievementUnlockedModal.classList.add('active');
@@ -951,80 +1022,5 @@ if (welcomeWarningConfirmBtn) {
 
 // Add smooth transition to greeting
 greeting.style.transition = 'transform 0.2s ease';
-
-// Celebration Effect Functions
-function createCelebrationEffect() {
-    const container = document.getElementById('celebrationEffect');
-    if (!container) return;
-    
-    // Clear any existing effects
-    container.innerHTML = '';
-    
-    // Create confetti strips (彩帶)
-    createConfetti(container);
-    
-    // Create fireworks (煙花)
-    createFireworks(container);
-}
-
-function createConfetti(container) {
-    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7', '#a29bfe', '#fd79a8', '#fdcb6e'];
-    const confettiCount = 100;
-    
-    for (let i = 0; i < confettiCount; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti';
-        
-        // Random properties
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        const left = Math.random() * 100;
-        const animationDelay = Math.random() * 3;
-        const animationDuration = 3 + Math.random() * 2;
-        const rotation = Math.random() * 360;
-        const size = 10 + Math.random() * 20;
-        
-        confetti.style.backgroundColor = color;
-        confetti.style.left = left + '%';
-        confetti.style.animationDelay = animationDelay + 's';
-        confetti.style.animationDuration = animationDuration + 's';
-        confetti.style.transform = `rotate(${rotation}deg)`;
-        confetti.style.width = size + 'px';
-        confetti.style.height = size + 'px';
-        
-        container.appendChild(confetti);
-    }
-}
-
-function createFireworks(container) {
-    const fireworkCount = 8;
-    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7', '#a29bfe'];
-    
-    for (let i = 0; i < fireworkCount; i++) {
-        const firework = document.createElement('div');
-        firework.className = 'firework';
-        
-        // Random position
-        const left = 20 + Math.random() * 60;
-        const top = 20 + Math.random() * 60;
-        const animationDelay = Math.random() * 1.5;
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        
-        firework.style.left = left + '%';
-        firework.style.top = top + '%';
-        firework.style.animationDelay = animationDelay + 's';
-        firework.style.borderColor = color;
-        
-        // Create particles for each firework
-        for (let j = 0; j < 12; j++) {
-            const particle = document.createElement('div');
-            particle.className = 'firework-particle';
-            particle.style.backgroundColor = color;
-            particle.style.transform = `rotate(${j * 30}deg)`;
-            firework.appendChild(particle);
-        }
-        
-        container.appendChild(firework);
-    }
-}
 
 console.log('魔法盒子網站已載入！');
