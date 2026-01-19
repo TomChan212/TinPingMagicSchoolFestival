@@ -169,6 +169,11 @@ const welcomeWarningConfirmBtn = document.getElementById('welcomeWarningConfirmB
 const achievementModal = document.getElementById('achievementModal');
 const achievementsList = document.getElementById('achievementsList');
 const closeAchievement = document.getElementById('closeAchievement');
+const achievementUnlockedModal = document.getElementById('achievementUnlockedModal');
+const unlockedAchievementName = document.getElementById('unlockedAchievementName');
+const unlockedAchievementImage = document.getElementById('unlockedAchievementImage');
+const unlockedAchievementDescription = document.getElementById('unlockedAchievementDescription');
+const achievementUnlockedConfirmBtn = document.getElementById('achievementUnlockedConfirmBtn');
 
 // Load collected rocks from localStorage
 let collectedRocks = JSON.parse(localStorage.getItem('collectedRocks')) || [];
@@ -471,6 +476,9 @@ function handleScannedCode(scannedText) {
         // Update display
         initializeRocks();
         
+        // Check for achievement unlock
+        checkAchievementUnlock();
+        
         // Close scanner first
         closeScannerModal();
         
@@ -503,6 +511,9 @@ function handleScannedCode(scannedText) {
             
             // Update display
             initializeRocks();
+            
+            // Check for achievement unlock
+            checkAchievementUnlock();
             
             // Close scanner first
             closeScannerModal();
@@ -627,6 +638,62 @@ function closeAchievementModal() {
     }
 }
 
+// Check and show achievement unlock notification
+function checkAchievementUnlock() {
+    const totalRocks = collectedRocks.length;
+    const totalDistractions = collectedDistractions.length;
+    const totalItems = totalRocks + totalDistractions;
+    const allRocksCollected = totalRocks === 6;
+    const allItemsCollected = totalItems === 19;
+    
+    // Get previous achievement states from localStorage
+    const prevAllRocksCollected = localStorage.getItem('prevAllRocksCollected') === 'true';
+    const prevAllItemsCollected = localStorage.getItem('prevAllItemsCollected') === 'true';
+    
+    // Check if 魔法大師 achievement was just unlocked
+    if (allRocksCollected && !prevAllRocksCollected) {
+        showAchievementUnlocked('魔法大師', 'magician.png', '收集所有魔法石');
+        localStorage.setItem('prevAllRocksCollected', 'true');
+    }
+    
+    // Check if 探險家 achievement was just unlocked
+    if (allItemsCollected && !prevAllItemsCollected) {
+        // Delay to show after 魔法大師 if both unlocked at the same time
+        setTimeout(() => {
+            showAchievementUnlocked('探險家', 'explorer.png', '收集所有物品（魔法石與其他魔法物品）');
+        }, allRocksCollected && !prevAllRocksCollected ? 3000 : 0);
+        localStorage.setItem('prevAllItemsCollected', 'true');
+    }
+    
+    // Update previous states
+    if (!allRocksCollected) {
+        localStorage.setItem('prevAllRocksCollected', 'false');
+    }
+    if (!allItemsCollected) {
+        localStorage.setItem('prevAllItemsCollected', 'false');
+    }
+}
+
+// Show achievement unlocked notification
+function showAchievementUnlocked(name, image, description) {
+    if (!achievementUnlockedModal || !unlockedAchievementName || !unlockedAchievementImage || !unlockedAchievementDescription) return;
+    
+    unlockedAchievementName.textContent = name;
+    unlockedAchievementImage.src = image;
+    unlockedAchievementImage.alt = name;
+    unlockedAchievementDescription.textContent = description;
+    
+    // Show modal
+    achievementUnlockedModal.classList.add('active');
+}
+
+// Close achievement unlocked notification
+function closeAchievementUnlocked() {
+    if (achievementUnlockedModal) {
+        achievementUnlockedModal.classList.remove('active');
+    }
+}
+
 // Achievement button
 if (achievementBtn) {
     achievementBtn.addEventListener('click', showAchievementModal);
@@ -644,6 +711,31 @@ if (achievementModal) {
             closeAchievementModal();
         }
     });
+}
+
+// Achievement unlocked notification button
+if (achievementUnlockedConfirmBtn) {
+    achievementUnlockedConfirmBtn.addEventListener('click', closeAchievementUnlocked);
+}
+
+// Close achievement unlocked modal when clicking outside
+if (achievementUnlockedModal) {
+    achievementUnlockedModal.addEventListener('click', function(e) {
+        if (e.target === achievementUnlockedModal) {
+            closeAchievementUnlocked();
+        }
+    });
+}
+
+// Initialize previous achievement states on page load
+if (typeof Storage !== 'undefined') {
+    if (!localStorage.getItem('prevAllRocksCollected')) {
+        localStorage.setItem('prevAllRocksCollected', collectedRocks.length === 6 ? 'true' : 'false');
+    }
+    if (!localStorage.getItem('prevAllItemsCollected')) {
+        const totalItems = collectedRocks.length + collectedDistractions.length;
+        localStorage.setItem('prevAllItemsCollected', totalItems === 19 ? 'true' : 'false');
+    }
 }
 
 // Open box button
@@ -791,6 +883,17 @@ function closeWelcomeWarning() {
 initializeRocks();
 createParticles();
 showWelcomeWarning();
+
+// Initialize previous achievement states on page load
+if (typeof Storage !== 'undefined') {
+    if (!localStorage.getItem('prevAllRocksCollected')) {
+        localStorage.setItem('prevAllRocksCollected', collectedRocks.length === 6 ? 'true' : 'false');
+    }
+    if (!localStorage.getItem('prevAllItemsCollected')) {
+        const totalItems = collectedRocks.length + collectedDistractions.length;
+        localStorage.setItem('prevAllItemsCollected', totalItems === 19 ? 'true' : 'false');
+    }
+}
 
 // Welcome warning confirm button
 if (welcomeWarningConfirmBtn) {
