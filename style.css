@@ -5,6 +5,19 @@
     -webkit-tap-highlight-color: transparent;
 }
 
+/* Font Face Declaration - Uncomment and add font file path if you have the font file */
+/*
+@font-face {
+    font-family: '華康香港標準楷書';
+    src: url('fonts/DFHKStandardKaiShu.woff2') format('woff2'),
+         url('fonts/DFHKStandardKaiShu.woff') format('woff'),
+         url('fonts/DFHKStandardKaiShu.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+*/
+
 /* Magical Glow Animation for Buttons */
 @keyframes magicalGlow {
     0%, 100% {
@@ -22,7 +35,7 @@
 }
 
 body {
-    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', serif;
+    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', 'Noto Serif TC', 'Source Han Serif TC', 'Microsoft YaHei', 'PingFang TC', 'Heiti TC', serif;
     display: block;
     min-height: 100vh;
     min-height: -webkit-fill-available; /* iOS Safari fix */
@@ -82,7 +95,7 @@ body {
 
 /* Reset Button */
 .reset-btn {
-    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', serif;
+    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', 'Noto Serif TC', 'Source Han Serif TC', 'Microsoft YaHei', 'PingFang TC', 'Heiti TC', serif;
     position: absolute;
     top: 0.8rem;
     left: 0.8rem;
@@ -134,7 +147,7 @@ body {
 
 /* Achievement Button - Golden Glowing */
 .achievement-btn {
-    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', serif;
+    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', 'Noto Serif TC', 'Source Han Serif TC', 'Microsoft YaHei', 'PingFang TC', 'Heiti TC', serif;
     position: absolute;
     top: 0.8rem;
     right: 0.8rem;
@@ -239,7 +252,7 @@ p {
 }
 
 button {
-    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', serif;
+    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', 'Noto Serif TC', 'Source Han Serif TC', 'Microsoft YaHei', 'PingFang TC', 'Heiti TC', serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
     color: #1a1a2e;
     border: none;
@@ -306,7 +319,7 @@ button:active {
 
 /* Open Bag Button */
 .open-bag-btn {
-    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', serif;
+    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', 'Noto Serif TC', 'Source Han Serif TC', 'Microsoft YaHei', 'PingFang TC', 'Heiti TC', serif;
     background: linear-gradient(135deg, #4facfe 0%, #00f2fe 50%, #667eea 100%);
     color: #1a1a2e;
     border: none;
@@ -464,7 +477,7 @@ button:active {
 }
 
 .no-rocks-confirm-btn {
-    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', serif;
+    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', 'Noto Serif TC', 'Source Han Serif TC', 'Microsoft YaHei', 'PingFang TC', 'Heiti TC', serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
     color: #1a1a2e;
     border: none;
@@ -502,7 +515,7 @@ button:active {
 
 /* Back Button */
 .back-btn {
-    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', serif;
+    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', 'Noto Serif TC', 'Source Han Serif TC', 'Microsoft YaHei', 'PingFang TC', 'Heiti TC', serif;
     background: linear-gradient(135deg, #a8edea 0%, #fed6e3 50%, #d299c2 100%);
     color: #1a1a2e;
     border: none;
@@ -541,7 +554,7 @@ button:active {
 
 /* Continue Collect Button (in collection view) */
 .continue-collect-btn {
-    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', serif;
+    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', 'Noto Serif TC', 'Source Han Serif TC', 'Microsoft YaHei', 'PingFang TC', 'Heiti TC', serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
     color: white;
     border: none;
@@ -737,7 +750,7 @@ button:active {
 }
 
 .close-scanner {
-    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', serif;
+    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', 'Noto Serif TC', 'Source Han Serif TC', 'Microsoft YaHei', 'PingFang TC', 'Heiti TC', serif;
     background: #e74c3c;
     color: white;
     border: none;
@@ -892,7 +905,7 @@ button:active {
 }
 
 .rock-info-confirm-btn {
-    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', serif;
+    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', 'Noto Serif TC', 'Source Han Serif TC', 'Microsoft YaHei', 'PingFang TC', 'Heiti TC', serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
     color: #1a1a2e;
     border: none;
@@ -1048,7 +1061,7 @@ button:active {
 }
 
 .welcome-warning-confirm-btn {
-    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', serif;
+    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', 'Noto Serif TC', 'Source Han Serif TC', 'Microsoft YaHei', 'PingFang TC', 'Heiti TC', serif;
     background: linear-gradient(135deg, #fa709a 0%, #fee140 50%, #fa709a 100%);
     color: #1a1a2e;
     border: none;
@@ -1139,7 +1152,7 @@ button:active {
 }
 
 .close-achievement {
-    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', serif;
+    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', 'Noto Serif TC', 'Source Han Serif TC', 'Microsoft YaHei', 'PingFang TC', 'Heiti TC', serif;
     background: #e74c3c;
     color: white;
     border: none;
@@ -1329,7 +1342,7 @@ button:active {
 }
 
 .achievement-unlocked-confirm-btn {
-    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', serif;
+    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', 'Noto Serif TC', 'Source Han Serif TC', 'Microsoft YaHei', 'PingFang TC', 'Heiti TC', serif;
     background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
     color: #1a1a2e;
     border: none;
@@ -1379,7 +1392,7 @@ button:active {
 }
 
 .open-box-button {
-    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', serif;
+    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', 'Noto Serif TC', 'Source Han Serif TC', 'Microsoft YaHei', 'PingFang TC', 'Heiti TC', serif;
     background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
     color: #1a1a2e;
     border: none;
