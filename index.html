@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1a1a2e">
-    <title>潘多拉盒子</title>
+    <title>魔法盒子</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
@@ -22,7 +22,7 @@
             <img src="pandora.png" alt="Pandora" class="theme-image" id="pandoraBox">
             <img src="justbox.png" alt="收集布袋" class="theme-image" id="bagImageMain" style="display: none;">
         </div>
-        <h1 id="greeting">潘多拉盒子</h1>
+        <h1 id="greeting">魔法盒子</h1>
         <p id="message">集齊魔法石便可把盒子打開</p>
         
         <!-- Rocks Collection Display -->
@@ -31,7 +31,9 @@
                 <div class="particles" id="particles"></div>
                 <img src="justbox.png" alt="收集布袋" class="bag-image" id="bagImage">
             </div>
-            <button class="open-bag-btn" id="openBagBtn">打開收集布袋</button>
+            <!-- Collect Items Button - positioned right above "打開收集布袋" button -->
+            <button id="clickButton">✨ 收集物品</button>
+            <button class="open-bag-btn" id="openBagBtn">🎒 打開收集布袋</button>
             <div class="rocks-content" id="rocksContent" style="display: none;">
                 <h3>已收集的物件</h3>
                 <div class="rocks-grid" id="rocksGrid">
@@ -40,12 +42,13 @@
                 <div class="no-rocks-message" id="noRocksMessage" style="display: none;">
                     <p>空無一物</p>
                 </div>
-                <button class="back-btn" id="backBtn">返回</button>
+                <!-- Collect Items Button - positioned in collection view -->
+                <button id="clickButtonCollection" class="continue-collect-btn" style="display: none;">➕ 繼續收集</button>
+                <button class="back-btn" id="backBtn">⬅️ 返回</button>
             </div>
         </div>
         
-        <button id="clickButton">收集物品</button>
-        <button id="openBoxButton" class="open-box-button" style="display: none;">恭喜你已找齊所以魔法石，可打開箱子！</button>
+        <button id="openBoxButton" class="open-box-button" style="display: none;">🎁 恭喜你已找齊所以魔法石，可打開箱子！</button>
     </div>
 
     <!-- QR Scanner Modal -->
@@ -72,7 +75,7 @@
             <h2 id="rockInfoName" class="rock-info-name"></h2>
             <p id="rockInfoDescription" class="rock-info-description"></p>
             <div class="rock-info-buttons">
-                <button class="rock-info-confirm-btn" id="rockInfoConfirmBtn">確認</button>
+                <button class="rock-info-confirm-btn" id="rockInfoConfirmBtn">✅ 確認</button>
             </div>
         </div>
     </div>
@@ -87,7 +90,7 @@
             <p class="warning-submessage">
                 所有收集的物品都保存在瀏覽器標籤頁中，關閉標籤頁將導致數據丟失。
             </p>
-            <button class="welcome-warning-confirm-btn" id="welcomeWarningConfirmBtn">我明白了</button>
+            <button class="welcome-warning-confirm-btn" id="welcomeWarningConfirmBtn">👍 我明白了</button>
         </div>
     </div>
 
@@ -115,7 +118,7 @@
                 <img id="unlockedAchievementImage" src="" alt="Achievement" class="achievement-unlocked-image">
                 <div class="achievement-unlocked-description" id="unlockedAchievementDescription"></div>
             </div>
-            <button class="achievement-unlocked-confirm-btn" id="achievementUnlockedConfirmBtn">確認</button>
+            <button class="achievement-unlocked-confirm-btn" id="achievementUnlockedConfirmBtn">✅ 確認</button>
         </div>
     </div>
 
