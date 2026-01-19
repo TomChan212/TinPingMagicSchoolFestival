@@ -1114,7 +1114,8 @@ button:active {
     padding: 1rem;
     padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     animation: fadeIn 0.3s ease;
-    overflow: hidden;
+    overflow: visible;
+    touch-action: pan-y;
 }
 
 .achievement-modal.active {
@@ -1132,7 +1133,11 @@ button:active {
     position: relative;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
     animation: slideUp 0.3s ease;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    -webkit-overflow-scrolling: touch;
 }
 
 .achievement-header {
@@ -1142,6 +1147,7 @@ button:active {
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
     border-bottom: 2px solid #eee;
+    flex-shrink: 0;
 }
 
 .achievement-header h2 {
@@ -1187,6 +1193,12 @@ button:active {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
 }
 
 .achievement-item {
