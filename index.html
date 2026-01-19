@@ -16,6 +16,7 @@
     <div class="overlay"></div>
     <div class="container">
         <button class="reset-btn" id="resetBtn">重置</button>
+        <button class="achievement-btn" id="achievementBtn">成就</button>
         <div class="image-container">
             <div class="particles-main" id="particlesMain"></div>
             <img src="pandora.png" alt="Pandora" class="theme-image" id="pandoraBox">
@@ -87,6 +88,19 @@
                 所有收集的物品都保存在瀏覽器標籤頁中，關閉標籤頁將導致數據丟失。
             </p>
             <button class="welcome-warning-confirm-btn" id="welcomeWarningConfirmBtn">我明白了</button>
+        </div>
+    </div>
+
+    <!-- Achievement Modal -->
+    <div class="achievement-modal" id="achievementModal">
+        <div class="achievement-content">
+            <div class="achievement-header">
+                <h2>成就</h2>
+                <button class="close-achievement" id="closeAchievement">✕</button>
+            </div>
+            <div class="achievements-list" id="achievementsList">
+                <!-- Achievements will be dynamically generated -->
+            </div>
         </div>
     </div>
 
