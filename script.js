@@ -162,9 +162,13 @@ const openBagBtn = document.getElementById('openBagBtn');
 const backBtn = document.getElementById('backBtn');
 const bagImageMain = document.getElementById('bagImageMain');
 const resetBtn = document.getElementById('resetBtn');
+const achievementBtn = document.getElementById('achievementBtn');
 const particlesMain = document.getElementById('particlesMain');
 const welcomeWarningModal = document.getElementById('welcomeWarningModal');
 const welcomeWarningConfirmBtn = document.getElementById('welcomeWarningConfirmBtn');
+const achievementModal = document.getElementById('achievementModal');
+const achievementsList = document.getElementById('achievementsList');
+const closeAchievement = document.getElementById('closeAchievement');
 
 // Load collected rocks from localStorage
 let collectedRocks = JSON.parse(localStorage.getItem('collectedRocks')) || [];
@@ -534,6 +538,112 @@ rockInfoConfirmBtn.addEventListener('click', closeRockInfoModal);
 // Reset button
 if (resetBtn) {
     resetBtn.addEventListener('click', resetGame);
+}
+
+// Show achievement modal
+function showAchievementModal() {
+    if (!achievementModal || !achievementsList) return;
+    
+    // Calculate achievements
+    const totalRocks = collectedRocks.length;
+    const totalDistractions = collectedDistractions.length;
+    const totalItems = totalRocks + totalDistractions;
+    const allRocksCollected = totalRocks === 6;
+    const allItemsCollected = totalItems === 19; // 6 magic rocks + 13 other magic items
+    
+    // Achievement 1: 探險家 - Collected all items (rocks + other magic items)
+    const achievement1Unlocked = allItemsCollected;
+    const achievement1Name = '探險家';
+    const achievement1Desc = '收集所有物品（魔法石與其他魔法物品）';
+    const achievement1Image = 'explorer.png';
+    const achievement1Progress = `${totalItems}/19`;
+    
+    // Achievement 2: 魔法大師 - Collected all magic rocks
+    const achievement2Unlocked = allRocksCollected;
+    const achievement2Name = '魔法大師';
+    const achievement2Desc = '收集所有魔法石';
+    const achievement2Image = 'magician.png';
+    const achievement2Progress = `${totalRocks}/6`;
+    
+    // Clear achievements list
+    achievementsList.innerHTML = '';
+    
+    // Create achievement 1
+    const achievement1 = createAchievementItem(
+        achievement1Unlocked,
+        achievement1Name,
+        achievement1Desc,
+        achievement1Image,
+        achievement1Progress
+    );
+    achievementsList.appendChild(achievement1);
+    
+    // Create achievement 2
+    const achievement2 = createAchievementItem(
+        achievement2Unlocked,
+        achievement2Name,
+        achievement2Desc,
+        achievement2Image,
+        achievement2Progress
+    );
+    achievementsList.appendChild(achievement2);
+    
+    // Show modal
+    achievementModal.classList.add('active');
+}
+
+// Create achievement item element
+function createAchievementItem(unlocked, name, description, image, progress) {
+    const item = document.createElement('div');
+    item.className = `achievement-item ${unlocked ? 'unlocked' : 'locked'}`;
+    
+    let html = '';
+    
+    if (unlocked) {
+        // Unlocked: show checkmark and full details
+        html = `
+            <div class="achievement-status">✅</div>
+            <div class="achievement-name">${name}</div>
+            <img src="${image}" alt="${name}" class="achievement-image" onerror="this.style.display='none'">
+            <div class="achievement-description">${description}</div>
+            <div class="achievement-progress">進度: ${progress}</div>
+        `;
+    } else {
+        // Locked: show question mark in square frame and name only
+        html = `
+            <div class="achievement-status-locked">❓</div>
+            <div class="achievement-name">${name}</div>
+        `;
+    }
+    
+    item.innerHTML = html;
+    return item;
+}
+
+// Close achievement modal
+function closeAchievementModal() {
+    if (achievementModal) {
+        achievementModal.classList.remove('active');
+    }
+}
+
+// Achievement button
+if (achievementBtn) {
+    achievementBtn.addEventListener('click', showAchievementModal);
+}
+
+// Close achievement modal
+if (closeAchievement) {
+    closeAchievement.addEventListener('click', closeAchievementModal);
+}
+
+// Close achievement modal when clicking outside
+if (achievementModal) {
+    achievementModal.addEventListener('click', function(e) {
+        if (e.target === achievementModal) {
+            closeAchievementModal();
+        }
+    });
 }
 
 // Open box button
