@@ -717,6 +717,9 @@ function showAchievementUnlocked(name, image, description) {
     unlockedAchievementImage.alt = name;
     unlockedAchievementDescription.textContent = description;
     
+    // Trigger celebration effect (confetti/fireworks)
+    createCelebrationEffect();
+    
     // Show modal
     achievementUnlockedModal.classList.add('active');
 }
@@ -948,5 +951,80 @@ if (welcomeWarningConfirmBtn) {
 
 // Add smooth transition to greeting
 greeting.style.transition = 'transform 0.2s ease';
+
+// Celebration Effect Functions
+function createCelebrationEffect() {
+    const container = document.getElementById('celebrationEffect');
+    if (!container) return;
+    
+    // Clear any existing effects
+    container.innerHTML = '';
+    
+    // Create confetti strips (彩帶)
+    createConfetti(container);
+    
+    // Create fireworks (煙花)
+    createFireworks(container);
+}
+
+function createConfetti(container) {
+    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7', '#a29bfe', '#fd79a8', '#fdcb6e'];
+    const confettiCount = 100;
+    
+    for (let i = 0; i < confettiCount; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        
+        // Random properties
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const left = Math.random() * 100;
+        const animationDelay = Math.random() * 3;
+        const animationDuration = 3 + Math.random() * 2;
+        const rotation = Math.random() * 360;
+        const size = 10 + Math.random() * 20;
+        
+        confetti.style.backgroundColor = color;
+        confetti.style.left = left + '%';
+        confetti.style.animationDelay = animationDelay + 's';
+        confetti.style.animationDuration = animationDuration + 's';
+        confetti.style.transform = `rotate(${rotation}deg)`;
+        confetti.style.width = size + 'px';
+        confetti.style.height = size + 'px';
+        
+        container.appendChild(confetti);
+    }
+}
+
+function createFireworks(container) {
+    const fireworkCount = 8;
+    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7', '#a29bfe'];
+    
+    for (let i = 0; i < fireworkCount; i++) {
+        const firework = document.createElement('div');
+        firework.className = 'firework';
+        
+        // Random position
+        const left = 20 + Math.random() * 60;
+        const top = 20 + Math.random() * 60;
+        const animationDelay = Math.random() * 1.5;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
+        firework.style.left = left + '%';
+        firework.style.top = top + '%';
+        firework.style.animationDelay = animationDelay + 's';
+        firework.style.borderColor = color;
+        
+        // Create particles for each firework
+        for (let j = 0; j < 12; j++) {
+            const particle = document.createElement('div');
+            particle.className = 'firework-particle';
+            particle.style.backgroundColor = color;
+            particle.style.transform = `rotate(${j * 30}deg)`;
+            firework.appendChild(particle);
+        }
+        
+        container.appendChild(firework);
+    }
+}
 
 console.log('魔法盒子網站已載入！');
