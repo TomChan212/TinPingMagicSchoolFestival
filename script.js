@@ -1007,7 +1007,7 @@ if (typeof Storage !== 'undefined') {
 
 // Open box button
 // Google Apps Script API URL
-const scriptURL = 'https://script.google.com/macros/s/AKfycbx7IlgrnS4mRx3UU5SKXvbdsWWQBr4MmRqzTgrQnvTv0TT68h90mJlqDRJSwPXbWc3n/exec';
+const scriptURL = 'https://script.google.com/macros/s/AKfycbz8DWvcfhl0ao0PCJ0DkGLRpKtZ0G89HM1WkJVyZcQfNES5aNHHJ9gAdsVoMbvqcDrJ/exec';
 
 function sendStockData() {
     const payload = {
