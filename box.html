@@ -379,9 +379,85 @@
         // Grand prize IDs
         const GRAND_PRIZE_IDS = ['#002', '#003', '#007'];
         
+        // Google Apps Script API URL
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbx7IlgrnS4mRx3UU5SKXvbdsWWQBr4MmRqzTgrQnvTv0TT68h90mJlqDRJSwPXbWc3n/exec';
+        
+        // Update Google Sheets quantity for a specific item
+        async function updateGoogleSheetQuantity(itemId, newQuantity) {
+            const payload = {
+                action: 'update',
+                id: itemId,
+                quantity: newQuantity
+            };
+            
+            try {
+                // Try using fetch with form data (more reliable for Google Apps Script)
+                const formData = new FormData();
+                formData.append('action', 'update');
+                formData.append('id', itemId);
+                formData.append('quantity', newQuantity.toString());
+                
+                // First try: Use form data
+                const response = await fetch(scriptURL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    cache: 'no-cache',
+                    body: formData
+                });
+                
+                // Since no-cors doesn't allow reading response, we'll also try JSON
+                // Send JSON request as backup
+                fetch(scriptURL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    cache: 'no-cache',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(() => {
+                    console.log(`✅ 已即時更新 Google Sheets: ${itemId} 的數量為 ${newQuantity}`);
+                })
+                .catch(error => {
+                    console.error('❌ 更新 Google Sheets 時發生錯誤:', error);
+                    // Retry once after 1 second
+                    setTimeout(() => {
+                        fetch(scriptURL, {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            cache: 'no-cache',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(payload)
+                        })
+                        .then(() => {
+                            console.log(`✅ 重試成功: 已更新 Google Sheets: ${itemId} 的數量為 ${newQuantity}`);
+                        })
+                        .catch(retryError => {
+                            console.error('❌ 重試失敗:', retryError);
+                        });
+                    }, 1000);
+                });
+                
+            } catch (error) {
+                console.error('❌ 更新 Google Sheets 時發生錯誤:', error);
+                // Fallback: Try using image tag method (works even with CORS restrictions)
+                const img = document.createElement('img');
+                img.src = scriptURL + '?action=update&id=' + encodeURIComponent(itemId) + '&quantity=' + encodeURIComponent(newQuantity);
+                img.style.display = 'none';
+                document.body.appendChild(img);
+                setTimeout(() => {
+                    if (img.parentNode) {
+                        img.parentNode.removeChild(img);
+                    }
+                }, 1000);
+            }
+        }
+        
         // Fetch random item from Google Sheets
         async function fetchRandomItem(includeGrandPrizes = false) {
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbwAJQgvUBCQ6495CW8QWfFZhRLvHHdep-jNtv7tZ7Ubqc2HxJwQ7pSto0LDC_RrlR8e/exec';
             
             try {
                 // Use JSONP to fetch data
@@ -405,6 +481,7 @@
                     
                     // Filter items where quantity > 0 and create weighted list
                     const weightedItems = [];
+                    const itemMap = {}; // Map category to item data (ID, category, quantity)
                     
                     dataArray.forEach(row => {
                         let id = '';
@@ -443,6 +520,11 @@
                             return;
                         }
                         
+                        // Store item data for later reference
+                        if (!itemMap[category]) {
+                            itemMap[category] = { id: id, category: category, quantity: quantity };
+                        }
+                        
                         // Add the item to weighted list based on its quantity
                         // Higher quantity = more entries in the list = higher probability
                         for (let i = 0; i < quantity; i++) {
@@ -462,8 +544,15 @@
                     // Randomly select one item from weighted list
                     const randomIndex = Math.floor(Math.random() * weightedItems.length);
                     const selectedCategory = weightedItems[randomIndex];
+                    const selectedItem = itemMap[selectedCategory];
                     
-                    // Show final reward
+                    // Update Google Sheets FIRST: decrease quantity by 1 (immediate update)
+                    if (selectedItem && selectedItem.id) {
+                        const newQuantity = Math.max(0, selectedItem.quantity - 1); // Ensure quantity doesn't go below 0
+                        updateGoogleSheetQuantity(selectedItem.id, newQuantity);
+                    }
+                    
+                    // Then show final reward
                     showFinalReward(selectedCategory);
                 };
                 
