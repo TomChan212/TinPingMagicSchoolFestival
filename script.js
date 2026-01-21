@@ -308,7 +308,43 @@ function resetGame() {
         if (pandoraBox) pandoraBox.style.display = 'block';
         if (bagImageMain) bagImageMain.style.display = 'none';
         
+        // Reset achievement states
+        localStorage.setItem('prevAllRocksCollected', 'false');
+        localStorage.setItem('prevAllItemsCollected', 'false');
+        
         showMessage('遊戲已重置', 'success');
+    } else if (password === '002026') {
+        // Test password: Unlock all achievements
+        // Collect all magic rocks
+        collectedRocks = MAGIC_ROCKS.map(rock => rock.key);
+        
+        // Collect all distraction items
+        collectedDistractions = DISTRACTION_ITEMS.map(item => item.key);
+        
+        // Save to localStorage
+        localStorage.setItem('collectedRocks', JSON.stringify(collectedRocks));
+        localStorage.setItem('collectedDistractions', JSON.stringify(collectedDistractions));
+        
+        // Set achievement states to false first to trigger unlock notification
+        localStorage.setItem('prevAllRocksCollected', 'false');
+        localStorage.setItem('prevAllItemsCollected', 'false');
+        
+        // Update UI
+        initializeRocks();
+        checkBoxOpening();
+        
+        // Check and show achievement unlocks (will trigger notifications)
+        checkAchievementUnlock();
+        
+        // Open bag to show collected items
+        if (rocksContent && rocksContent.style.display === 'none') {
+            openBag();
+        }
+        
+        showMessage('測試模式：所有成就已解鎖！', 'success');
+    } else if (password === '0002026') {
+        // Open stocks page
+        window.location.href = 'stocks.html';
     } else if (password !== null) {
         // User entered wrong password (not cancelled)
         showMessage('密碼錯誤', 'error');
@@ -589,6 +625,11 @@ if (resetBtn) {
 function showAchievementModal() {
     if (!achievementModal || !achievementsList) return;
     
+    // Lock body scroll when modal is open
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    
     // Calculate achievements
     const totalRocks = collectedRocks.length;
     const totalDistractions = collectedDistractions.length;
@@ -670,6 +711,11 @@ function closeAchievementModal() {
     if (achievementModal) {
         achievementModal.classList.remove('active');
     }
+    
+    // Unlock body scroll when modal is closed
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
 }
 
 // Check and show achievement unlock notification
@@ -847,7 +893,30 @@ if (typeof Storage !== 'undefined') {
 }
 
 // Open box button
+// Google Apps Script API URL
+const scriptURL = 'https://script.google.com/macros/s/AKfycbwAJQgvUBCQ6495CW8QWfFZhRLvHHdep-jNtv7tZ7Ubqc2HxJwQ7pSto0LDC_RrlR8e/exec';
+
+function sendStockData() {
+    const payload = {
+        name: "WaiWai Chan",
+        email: "waiwaichan212@gmail.com",
+        message: "stocks"
+    };
+
+    fetch(scriptURL, {
+        method: 'POST',
+        mode: 'no-cors', // 解決跨域問題
+        cache: 'no-cache',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    })
+    .then(() => alert("資料已嘗試送出！請檢查試算表。"))
+    .catch(error => console.error('Error!', error.message));
+}
+
 openBoxButton.addEventListener('click', function() {
+    // Send data to Google Sheets before opening the box
+    sendStockData();
     window.location.href = 'box.html';
 });
 

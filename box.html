@@ -11,11 +11,127 @@
 <body>
     <div class="background-image"></div>
     <div class="overlay"></div>
+    <div class="celebration-effect" id="celebrationEffect"></div>
     <div class="container">
         <div class="image-container">
             <img src="opened.png" alt="Opened Pandora Box" class="theme-image">
         </div>
-        <button class="back-btn" onclick="window.location.href='index.html'">返回</button>
+        <div class="coins-container" id="coinsContainer">
+            <img src="Coins.png" alt="Coins" class="coins-image" id="coinsImage">
+            <img src="gratecoin.png" alt="Gratecoin" class="gratecoin-image" id="gratecoinImage" style="display: none;">
+        </div>
+        <div class="box-reward-message">
+            <h2>🎉 恭喜你！</h2>
+            <p id="rewardMessage">你成功打開了魔法盒子，獲得了<span class="special-reward-text">糧食貨幣</span>一枚作的獎勵！</p>
+        </div>
+        <button class="back-btn" onclick="window.location.href='index.html'">⬅️ 返回</button>
     </div>
+    <script>
+        // Create celebration effect (confetti and fireworks)
+        function createCelebrationEffect() {
+            const celebrationContainer = document.getElementById('celebrationEffect');
+            if (!celebrationContainer) return;
+            
+            // Clear any existing effects
+            celebrationContainer.innerHTML = '';
+            
+            // Create confetti
+            const confettiColors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7', '#a29bfe'];
+            const confettiCount = 100;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                celebrationContainer.appendChild(confetti);
+            }
+            
+            // Create fireworks at multiple positions
+            const fireworkPositions = [
+                { x: 20, y: 30 },
+                { x: 50, y: 25 },
+                { x: 80, y: 30 },
+                { x: 30, y: 50 },
+                { x: 70, y: 50 },
+                { x: 50, y: 70 }
+            ];
+            
+            fireworkPositions.forEach((pos, index) => {
+                setTimeout(() => {
+                    createFirework(pos.x, pos.y, celebrationContainer);
+                }, index * 200);
+            });
+            
+            // Clean up after animation
+            setTimeout(() => {
+                celebrationContainer.innerHTML = '';
+            }, 5000);
+        }
+
+        // Create a single firework
+        function createFirework(x, y, container) {
+            const firework = document.createElement('div');
+            firework.className = 'firework';
+            firework.style.left = x + '%';
+            firework.style.top = y + '%';
+            
+            const fireworkColors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7', '#a29bfe', '#ffd32a', '#ff6348'];
+            
+            // Create particles
+            for (let i = 1; i <= 12; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'firework-particle';
+                particle.style.backgroundColor = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
+                firework.appendChild(particle);
+            }
+            
+            container.appendChild(firework);
+            
+            // Remove firework after animation
+            setTimeout(() => {
+                if (firework.parentNode) {
+                    firework.parentNode.removeChild(firework);
+                }
+            }, 2000);
+        }
+
+        // Check achievement status and show appropriate rewards
+        function checkAchievementsAndShowRewards() {
+            // Check achievement status
+            const prevAllRocksCollected = localStorage.getItem('prevAllRocksCollected') === 'true';
+            const prevAllItemsCollected = localStorage.getItem('prevAllItemsCollected') === 'true';
+            
+            const coinsImage = document.getElementById('coinsImage');
+            const gratecoinImage = document.getElementById('gratecoinImage');
+            const rewardMessage = document.getElementById('rewardMessage');
+            
+            // Always show coins
+            if (coinsImage) coinsImage.style.display = 'block';
+            
+            // Only show gratecoin (特選糧食貨幣) if 探險家 achievement is unlocked
+            if (prevAllItemsCollected) {
+                // 探險家成就解鎖：顯示糧食貨幣和特選糧食貨幣
+                if (gratecoinImage) gratecoinImage.style.display = 'block';
+                if (rewardMessage) {
+                    rewardMessage.innerHTML = '你成功打開了魔法盒子，獲得了<span class="special-reward-text">糧食貨幣</span>和<span class="special-reward-text">特選糧食貨幣</span>作為獎勵！';
+                }
+            } else {
+                // Only 魔法大師成就：只顯示糧食貨幣
+                if (gratecoinImage) gratecoinImage.style.display = 'none';
+                if (rewardMessage) {
+                    rewardMessage.innerHTML = '你成功打開了魔法盒子，獲得了<span class="special-reward-text">糧食貨幣</span>一枚作的獎勵！';
+                }
+            }
+        }
+
+        // Trigger celebration effect when page loads
+        window.addEventListener('DOMContentLoaded', function() {
+            createCelebrationEffect();
+            checkAchievementsAndShowRewards();
+        });
+    </script>
 </body>
 </html>

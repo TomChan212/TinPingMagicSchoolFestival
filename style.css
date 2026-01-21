@@ -1114,8 +1114,8 @@ button:active {
     padding: 1rem;
     padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     animation: fadeIn 0.3s ease;
-    overflow: visible;
-    touch-action: pan-y;
+    overflow: hidden;
+    touch-action: none;
 }
 
 .achievement-modal.active {
@@ -1693,3 +1693,300 @@ button:active {
 .firework-particle:nth-child(10) { animation: particleMove10 1.5s ease-out forwards; }
 .firework-particle:nth-child(11) { animation: particleMove11 1.5s ease-out forwards; }
 .firework-particle:nth-child(12) { animation: particleMove12 1.5s ease-out forwards; }
+
+/* Box Page Styles */
+.coins-container {
+    margin: 2rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    animation: fadeIn 0.8s ease;
+}
+
+.coins-image {
+    max-width: 100%;
+    width: 200px;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
+    animation: coinsGlow 2s ease-in-out infinite;
+}
+
+.gratecoin-image {
+    max-width: 100%;
+    width: 200px;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(138, 43, 226, 0.5);
+    animation: gratecoinGlow 2s ease-in-out infinite;
+}
+
+@keyframes gratecoinGlow {
+    0%, 100% {
+        box-shadow: 0 10px 30px rgba(138, 43, 226, 0.5);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 15px 40px rgba(138, 43, 226, 0.8);
+        transform: scale(1.05);
+    }
+}
+
+@keyframes coinsGlow {
+    0%, 100% {
+        box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 15px 40px rgba(255, 215, 0, 0.8);
+        transform: scale(1.05);
+    }
+}
+
+.box-reward-message {
+    text-align: center;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 193, 7, 0.1) 100%);
+    border-radius: 15px;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    animation: fadeIn 1s ease;
+}
+
+.box-reward-message h2 {
+    font-size: 2rem;
+    color: #f39c12;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    text-shadow: 0 2px 4px rgba(243, 156, 18, 0.3);
+}
+
+.box-reward-message p {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.special-reward-text {
+    font-weight: bold;
+    color: #6a1b9a;
+    text-shadow: 0 0 10px rgba(106, 27, 154, 0.8),
+                 0 0 20px rgba(106, 27, 154, 0.6),
+                 0 0 30px rgba(106, 27, 154, 0.4);
+    animation: textShine 2s ease-in-out infinite;
+    display: inline-block;
+    padding: 0 0.2rem;
+}
+
+@keyframes textShine {
+    0%, 100% {
+        text-shadow: 0 0 10px rgba(106, 27, 154, 0.8),
+                     0 0 20px rgba(106, 27, 154, 0.6),
+                     0 0 30px rgba(106, 27, 154, 0.4);
+        color: #6a1b9a;
+    }
+    50% {
+        text-shadow: 0 0 20px rgba(106, 27, 154, 1),
+                     0 0 30px rgba(106, 27, 154, 0.8),
+                     0 0 40px rgba(106, 27, 154, 0.6),
+                     0 0 50px rgba(106, 27, 154, 0.4);
+        color: #8e24aa;
+    }
+}
+
+/* Stocks Page Styles */
+.stocks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+}
+
+.stocks-header h1 {
+    margin: 0;
+    flex: 1;
+}
+
+.refresh-btn {
+    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', 'Noto Serif TC', 'Source Han Serif TC', 'Microsoft YaHei', 'PingFang TC', 'Heiti TC', serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    min-height: 44px;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    animation: magicalGlow 1.5s ease-in-out infinite;
+}
+
+.refresh-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5),
+                0 0 15px rgba(138, 43, 226, 0.6),
+                0 0 25px rgba(138, 43, 226, 0.4),
+                0 0 35px rgba(138, 43, 226, 0.3);
+}
+
+.refresh-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+}
+
+.stocks-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+.loading-message,
+.no-data-message {
+    text-align: center;
+    padding: 2rem;
+    color: #2c3e50;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.loading-message p {
+    margin-bottom: 1.5rem;
+    margin-top: 0;
+}
+
+.progress-bar-container {
+    width: 100%;
+    max-width: 400px;
+    height: 8px;
+    background-color: rgba(44, 62, 80, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 0 auto;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+    background-size: 200% 100%;
+    border-radius: 10px;
+    transition: width 0.3s ease;
+    animation: progressShine 2s linear infinite;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+}
+
+@keyframes progressShine {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.stocks-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 1rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 240, 240, 0.95) 100%);
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.5s ease;
+    border: 2px solid rgba(106, 27, 154, 0.3);
+}
+
+.stocks-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+}
+
+.stocks-table thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.stocks-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: bold;
+    font-size: 1.1rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.stocks-table th:first-child {
+    border-top-left-radius: 13px;
+}
+
+.stocks-table th:last-child {
+    border-top-right-radius: 13px;
+}
+
+.stocks-table tbody tr {
+    border-bottom: 1px solid rgba(106, 27, 154, 0.1);
+    transition: background-color 0.2s;
+}
+
+.stocks-table tbody tr:hover {
+    background-color: rgba(102, 126, 234, 0.1);
+}
+
+.stocks-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.stocks-table td {
+    padding: 1rem;
+    color: #2c3e50;
+}
+
+.stock-category {
+    font-weight: bold;
+    color: #6a1b9a;
+    font-size: 1.1rem;
+}
+
+.stock-number {
+    font-weight: bold;
+    color: #f39c12;
+    font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+    .stocks-container {
+        padding: 0.5rem;
+    }
+    
+    .stocks-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .refresh-btn {
+        width: 100%;
+    }
+    
+    .stocks-table {
+        font-size: 0.9rem;
+    }
+    
+    .stocks-table th,
+    .stocks-table td {
+        padding: 0.75rem 0.5rem;
+    }
+    
+    .stock-category {
+        font-size: 1rem;
+    }
+    
+    .stock-number {
+        font-size: 1.1rem;
+    }
+}
