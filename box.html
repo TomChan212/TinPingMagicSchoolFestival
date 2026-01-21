@@ -76,6 +76,15 @@
         </div>
     </div>
 
+    <!-- Loading Animation -->
+    <div class="loading-animation" id="loadingAnimation" style="display: none;">
+        <div class="magic-circle">
+            <div class="magic-circle-inner"></div>
+            <div class="magic-circle-outer"></div>
+        </div>
+        <p class="loading-text">加載中</p>
+    </div>
+
     <script>
         // Create celebration effect (confetti and fireworks)
         function createCelebrationEffect() {
@@ -456,8 +465,26 @@
             }
         }
         
+        // Show loading animation
+        function showLoadingAnimation() {
+            const loadingAnimation = document.getElementById('loadingAnimation');
+            if (loadingAnimation) {
+                loadingAnimation.style.display = 'flex';
+            }
+        }
+
+        // Hide loading animation
+        function hideLoadingAnimation() {
+            const loadingAnimation = document.getElementById('loadingAnimation');
+            if (loadingAnimation) {
+                loadingAnimation.style.display = 'none';
+            }
+        }
+
         // Fetch random item from Google Sheets
         async function fetchRandomItem(includeGrandPrizes = false) {
+            // Show loading animation
+            showLoadingAnimation();
             
             try {
                 // Use JSONP to fetch data
@@ -532,6 +559,9 @@
                         }
                     });
                     
+                    // Hide loading animation
+                    hideLoadingAnimation();
+                    
                     if (weightedItems.length === 0) {
                         if (includeGrandPrizes) {
                             showFinalReward('目前沒有可用的大獎');
@@ -560,6 +590,9 @@
                 const script = document.createElement('script');
                 script.src = scriptURL + '?action=get&callback=' + callbackName + '&_t=' + timestamp;
                 script.onerror = function() {
+                    // Hide loading animation
+                    hideLoadingAnimation();
+                    
                     delete window[callbackName];
                     if (script.parentNode) {
                         script.parentNode.removeChild(script);
@@ -571,6 +604,9 @@
                 
                 // Timeout after 10 seconds
                 setTimeout(() => {
+                    // Hide loading animation
+                    hideLoadingAnimation();
+                    
                     if (window[callbackName]) {
                         delete window[callbackName];
                         if (script.parentNode) {
@@ -581,6 +617,9 @@
                 }, 10000);
                 
             } catch (error) {
+                // Hide loading animation
+                hideLoadingAnimation();
+                
                 console.error('Error fetching data:', error);
                 showFinalReward('無法讀取數據，請稍後再試');
             }
