@@ -415,7 +415,7 @@ function resetGame() {
     const password = prompt('請輸入密碼以重置遊戲：');
     
     // Check password
-    if (password === 'tp0125') {
+    if (password === '0125tp') {
         // Show admin options modal
         showAdminOptions();
     } else if (password === '0125') {
