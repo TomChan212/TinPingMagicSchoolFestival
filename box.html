@@ -527,7 +527,9 @@
                     // Filter items where quantity > 0 and create weighted list
                     const weightedItems = [];
                     const itemMap = {}; // Map category to item data (ID, category, quantity)
+                    let isFallbackToRegular = false; // Track if we're falling back to regular items
                     
+                    // First pass: collect items based on includeGrandPrizes flag
                     dataArray.forEach(row => {
                         let id = '';
                         let quantity = 0;
@@ -547,10 +549,7 @@
                         // Check if this is a grand prize
                         const isGrandPrize = GRAND_PRIZE_IDS.includes(id);
                         
-                        // Skip if:
-                        // 1. Quantity is 0 or category is empty
-                        // 2. It's a grand prize but includeGrandPrizes is false
-                        // 3. It's not a grand prize but includeGrandPrizes is true (only grand prizes allowed)
+                        // Skip if quantity is 0 or category is empty
                         if (quantity <= 0 || !category) {
                             return;
                         }
@@ -561,7 +560,7 @@
                         }
                         
                         if (!isGrandPrize && includeGrandPrizes) {
-                            // Not a grand prize but in supermagic mode - skip (only grand prizes allowed)
+                            // Not a grand prize but in supermagic mode - skip (only grand prizes allowed in first pass)
                             return;
                         }
                         
@@ -576,6 +575,41 @@
                             weightedItems.push(category);
                         }
                     });
+                    
+                    // If includeGrandPrizes is true but no grand prizes available, fallback to regular items
+                    if (includeGrandPrizes && weightedItems.length === 0) {
+                        isFallbackToRegular = true;
+                        // Second pass: collect regular items (non-grand prizes)
+                        dataArray.forEach(row => {
+                            let id = '';
+                            let quantity = 0;
+                            let category = '';
+                            
+                            if (typeof row === 'object' && !Array.isArray(row)) {
+                                const keys = Object.keys(row);
+                                id = row.ID || row['ID'] || row.id || row['id'] || row['編號'] || (keys.length >= 1 ? row[keys[0]] : '');
+                                quantity = parseInt(row.Quantity || row['Quantity'] || row.quantity || row['quantity'] || row['數量'] || (keys.length >= 3 ? row[keys[2]] : 0)) || 0;
+                                category = row.category || row['category'] || row['類別'] || (keys.length >= 2 ? row[keys[1]] : '');
+                            } else if (Array.isArray(row)) {
+                                id = row[0] || '';
+                                quantity = parseInt(row[2]) || 0;
+                                category = row[1] || '';
+                            }
+                            
+                            const isGrandPrize = GRAND_PRIZE_IDS.includes(id);
+                            
+                            // Only collect non-grand prizes with quantity > 0
+                            if (quantity > 0 && category && !isGrandPrize) {
+                                if (!itemMap[category]) {
+                                    itemMap[category] = { id: id, category: category, quantity: quantity };
+                                }
+                                
+                                for (let i = 0; i < quantity; i++) {
+                                    weightedItems.push(category);
+                                }
+                            }
+                        });
+                    }
                     
                     // Hide loading animation
                     hideLoadingAnimation();
@@ -600,8 +634,12 @@
                         updateGoogleSheetQuantity(selectedItem.id, newQuantity);
                     }
                     
-                    // Then show final reward
-                    showFinalReward(selectedCategory);
+                    // Then show final reward with special message if fallback
+                    if (isFallbackToRegular) {
+                        showFinalRewardWithFallback(selectedCategory);
+                    } else {
+                        showFinalReward(selectedCategory);
+                    }
                 };
                 
                 // Create script tag for JSONP
@@ -650,6 +688,17 @@
             
             if (finalRewardModal && finalRewardMessage) {
                 finalRewardMessage.textContent = `恭喜你獲得 ${itemName} !!! 請示意領取。`;
+                finalRewardModal.classList.add('active');
+            }
+        }
+        
+        // Show final reward message with fallback message (when grand prizes are all sent out)
+        function showFinalRewardWithFallback(itemName) {
+            const finalRewardModal = document.getElementById('finalRewardModal');
+            const finalRewardMessage = document.getElementById('finalRewardMessage');
+            
+            if (finalRewardModal && finalRewardMessage) {
+                finalRewardMessage.textContent = `Sorry all the 至尊 prize are all sent out, you got "${itemName}", thank you for 踴躍參與`;
                 finalRewardModal.classList.add('active');
             }
         }
