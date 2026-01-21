@@ -629,9 +629,13 @@
                     const selectedItem = itemMap[selectedCategory];
                     
                     // Update Google Sheets FIRST: decrease quantity by 1 (immediate update)
+                    // This applies to both magic and supermagic scans
                     if (selectedItem && selectedItem.id) {
                         const newQuantity = Math.max(0, selectedItem.quantity - 1); // Ensure quantity doesn't go below 0
+                        console.log(`🔄 準備更新 Google Sheets: ${selectedItem.id} (${selectedItem.category}) 從 ${selectedItem.quantity} 減至 ${newQuantity}`);
                         updateGoogleSheetQuantity(selectedItem.id, newQuantity);
+                    } else {
+                        console.warn('⚠️ 無法更新 Google Sheets: 選中的物品缺少 ID 或數據');
                     }
                     
                     // Then show final reward with special message if fallback
@@ -698,7 +702,7 @@
             const finalRewardMessage = document.getElementById('finalRewardMessage');
             
             if (finalRewardModal && finalRewardMessage) {
-                finalRewardMessage.textContent = `Sorry all the 至尊 prize are all sent out, you got "${itemName}", thank you for 踴躍參與`;
+                finalRewardMessage.textContent = `很抱歉，所有至尊獎品已經發送完畢，您獲得了「${itemName}」，非常感謝您的踴躍參與！`;
                 finalRewardModal.classList.add('active');
             }
         }
