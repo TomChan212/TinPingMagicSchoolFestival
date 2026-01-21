@@ -267,13 +267,158 @@ function checkBoxOpening() {
     }
 }
 
+// Show admin options modal
+function showAdminOptions() {
+    const adminOptionsModal = document.getElementById('adminOptionsModal');
+    if (adminOptionsModal) {
+        adminOptionsModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+    }
+}
+
+// Close admin options modal
+function closeAdminOptions() {
+    const adminOptionsModal = document.getElementById('adminOptionsModal');
+    if (adminOptionsModal) {
+        adminOptionsModal.classList.remove('active');
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+    }
+}
+
+// Reset game function (clear all collected items)
+function performResetGame() {
+    // Clear collected items
+    collectedRocks = [];
+    collectedDistractions = [];
+    
+    // Clear localStorage
+    localStorage.setItem('collectedRocks', JSON.stringify([]));
+    localStorage.setItem('collectedDistractions', JSON.stringify([]));
+    // Also clear welcome warning flag so it shows again after reset
+    localStorage.removeItem('hasSeenWelcomeWarning');
+    
+    // Reset UI
+    initializeRocks();
+    checkBoxOpening();
+    
+    // Reset box state
+    if (pandoraBox) {
+        pandoraBox.classList.remove('box-open');
+    }
+    if (greeting) {
+        greeting.textContent = '魔法盒子';
+    }
+    if (message) {
+        message.textContent = '集齊魔法石便可把盒子打開';
+    }
+    
+    // Close bag if open
+    if (rocksContent && rocksContent.style.display === 'none') {
+        closeBag();
+    }
+    
+    // Reset image
+    if (pandoraBox) pandoraBox.style.display = 'block';
+    if (bagImageMain) bagImageMain.style.display = 'none';
+    
+    // Reset achievement states
+    localStorage.setItem('prevAllRocksCollected', 'false');
+    localStorage.setItem('prevAllItemsCollected', 'false');
+    
+    // Reset coin usage states
+    localStorage.setItem('coinsUsed', 'false');
+    localStorage.setItem('gratecoinUsed', 'false');
+    
+    closeAdminOptions();
+    showMessage('遊戲已重置', 'success');
+}
+
+// Unlock only 魔法大師 achievement
+function performUnlockMaster() {
+    // Collect all magic rocks only
+    collectedRocks = MAGIC_ROCKS.map(rock => rock.key);
+    
+    // Clear distraction items (don't collect them)
+    collectedDistractions = [];
+    
+    // Save to localStorage
+    localStorage.setItem('collectedRocks', JSON.stringify(collectedRocks));
+    localStorage.setItem('collectedDistractions', JSON.stringify(collectedDistractions));
+    
+    // Set achievement states to false first to trigger unlock notification
+    localStorage.setItem('prevAllRocksCollected', 'false');
+    localStorage.setItem('prevAllItemsCollected', 'false');
+    
+    // Reset coin usage states (so coins are not marked as used)
+    localStorage.setItem('coinsUsed', 'false');
+    localStorage.setItem('gratecoinUsed', 'false');
+    
+    // Update UI
+    initializeRocks();
+    checkBoxOpening();
+    
+    // Check and show achievement unlocks (will trigger notifications)
+    checkAchievementUnlock();
+    
+    // Open bag to show collected items
+    if (rocksContent && rocksContent.style.display === 'none') {
+        openBag();
+    }
+    
+    closeAdminOptions();
+    showMessage('測試模式：魔法大師成就已解鎖！', 'success');
+}
+
+// Unlock all achievements
+function performUnlockAll() {
+    // Collect all magic rocks
+    collectedRocks = MAGIC_ROCKS.map(rock => rock.key);
+    
+    // Collect all distraction items
+    collectedDistractions = DISTRACTION_ITEMS.map(item => item.key);
+    
+    // Save to localStorage
+    localStorage.setItem('collectedRocks', JSON.stringify(collectedRocks));
+    localStorage.setItem('collectedDistractions', JSON.stringify(collectedDistractions));
+    
+    // Set achievement states to false first to trigger unlock notification
+    localStorage.setItem('prevAllRocksCollected', 'false');
+    localStorage.setItem('prevAllItemsCollected', 'false');
+    
+    // Reset coin usage states (so coins are not marked as used)
+    localStorage.setItem('coinsUsed', 'false');
+    localStorage.setItem('gratecoinUsed', 'false');
+    
+    // Update UI
+    initializeRocks();
+    checkBoxOpening();
+    
+    // Check and show achievement unlocks (will trigger notifications)
+    checkAchievementUnlock();
+    
+    // Open bag to show collected items
+    if (rocksContent && rocksContent.style.display === 'none') {
+        openBag();
+    }
+    
+    closeAdminOptions();
+    showMessage('測試模式：所有成就已解鎖！', 'success');
+}
+
 // Reset function - clear all collected items
 function resetGame() {
     // Ask for password
     const password = prompt('請輸入密碼以重置遊戲：');
     
     // Check password
-    if (password === '0125') {
+    if (password === 'tp0125') {
+        // Show admin options modal
+        showAdminOptions();
+    } else if (password === '0125') {
         // Clear collected items
         collectedRocks = [];
         collectedDistractions = [];
@@ -313,42 +458,6 @@ function resetGame() {
         localStorage.setItem('prevAllItemsCollected', 'false');
         
         showMessage('遊戲已重置', 'success');
-    } else if (password === '002026') {
-        // Test password: Unlock all achievements
-        // Collect all magic rocks
-        collectedRocks = MAGIC_ROCKS.map(rock => rock.key);
-        
-        // Collect all distraction items
-        collectedDistractions = DISTRACTION_ITEMS.map(item => item.key);
-        
-        // Save to localStorage
-        localStorage.setItem('collectedRocks', JSON.stringify(collectedRocks));
-        localStorage.setItem('collectedDistractions', JSON.stringify(collectedDistractions));
-        
-        // Set achievement states to false first to trigger unlock notification
-        localStorage.setItem('prevAllRocksCollected', 'false');
-        localStorage.setItem('prevAllItemsCollected', 'false');
-        
-        // Reset coin usage states (so coins are not marked as used)
-        localStorage.setItem('coinsUsed', 'false');
-        localStorage.setItem('gratecoinUsed', 'false');
-        
-        // Update UI
-        initializeRocks();
-        checkBoxOpening();
-        
-        // Check and show achievement unlocks (will trigger notifications)
-        checkAchievementUnlock();
-        
-        // Open bag to show collected items
-        if (rocksContent && rocksContent.style.display === 'none') {
-            openBag();
-        }
-        
-        showMessage('測試模式：所有成就已解鎖！', 'success');
-    } else if (password === '0002026') {
-        // Open stocks page
-        window.location.href = 'stocks.html';
     } else if (password !== null) {
         // User entered wrong password (not cancelled)
         showMessage('密碼錯誤', 'error');
@@ -1091,6 +1200,45 @@ if (typeof Storage !== 'undefined') {
 // Welcome warning confirm button
 if (welcomeWarningConfirmBtn) {
     welcomeWarningConfirmBtn.addEventListener('click', closeWelcomeWarning);
+}
+
+// Admin options modal event listeners
+const adminOptionsModal = document.getElementById('adminOptionsModal');
+const closeAdminOptionsBtn = document.getElementById('closeAdminOptions');
+const resetGameBtn = document.getElementById('resetGameBtn');
+const unlockMasterBtn = document.getElementById('unlockMasterBtn');
+const unlockAllBtn = document.getElementById('unlockAllBtn');
+const openStocksBtn = document.getElementById('openStocksBtn');
+
+if (closeAdminOptionsBtn) {
+    closeAdminOptionsBtn.addEventListener('click', closeAdminOptions);
+}
+
+if (adminOptionsModal) {
+    adminOptionsModal.addEventListener('click', function(e) {
+        if (e.target === adminOptionsModal) {
+            closeAdminOptions();
+        }
+    });
+}
+
+if (resetGameBtn) {
+    resetGameBtn.addEventListener('click', performResetGame);
+}
+
+if (unlockMasterBtn) {
+    unlockMasterBtn.addEventListener('click', performUnlockMaster);
+}
+
+if (unlockAllBtn) {
+    unlockAllBtn.addEventListener('click', performUnlockAll);
+}
+
+if (openStocksBtn) {
+    openStocksBtn.addEventListener('click', function() {
+        closeAdminOptions();
+        window.location.href = 'stocks.html';
+    });
 }
 
 // Add smooth transition to greeting

@@ -1098,6 +1098,121 @@ button:active {
     box-shadow: 0 2px 10px rgba(231, 76, 60, 0.3);
 }
 
+/* Admin Options Modal */
+.admin-options-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 3001;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    animation: fadeIn 0.3s ease;
+    overflow: hidden;
+}
+
+.admin-options-modal.active {
+    display: flex;
+}
+
+.admin-options-content {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 240, 240, 0.95) 100%);
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+    animation: slideUp 0.3s ease;
+    border: 3px solid rgba(106, 27, 154, 0.3);
+}
+
+.admin-options-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(106, 27, 154, 0.2);
+}
+
+.admin-options-header h2 {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin: 0;
+    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', 'Noto Serif TC', 'Source Han Serif TC', 'Microsoft YaHei', 'PingFang TC', 'Heiti TC', serif;
+}
+
+.close-admin-options {
+    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', 'Noto Serif TC', 'Source Han Serif TC', 'Microsoft YaHei', 'PingFang TC', 'Heiti TC', serif;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, background 0.2s;
+    min-width: 44px;
+    min-height: 44px;
+}
+
+.close-admin-options:hover {
+    background: #c0392b;
+    transform: scale(1.1);
+}
+
+.close-admin-options:active {
+    transform: scale(0.95);
+}
+
+.admin-options-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.admin-option-btn {
+    font-family: '華康香港標準楷書', 'DFHK Standard Kai Shu', 'DFKai-SB', '標楷體', 'KaiTi', 'STKaiti', '楷體', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'Kai', 'Noto Serif TC', 'Source Han Serif TC', 'Microsoft YaHei', 'PingFang TC', 'Heiti TC', serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    color: white;
+    border: none;
+    padding: 1.2rem 1.5rem;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    min-height: 60px;
+    text-align: left;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    animation: magicalGlow 3s ease-in-out infinite;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.admin-option-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5),
+                0 0 15px rgba(138, 43, 226, 0.6),
+                0 0 25px rgba(138, 43, 226, 0.4),
+                0 0 35px rgba(138, 43, 226, 0.3);
+}
+
+.admin-option-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+}
+
 /* Achievement Modal */
 .achievement-modal {
     display: none;
