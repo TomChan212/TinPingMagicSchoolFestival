@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1a1a2e">
-    <title>數據記錄</title>
+    <title>貨存</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,7 +15,7 @@
     <div class="overlay"></div>
     <div class="container">
         <div class="stocks-header">
-            <h1>數據記錄</h1>
+            <h1>貨存</h1>
             <button class="refresh-btn" id="refreshBtn" onclick="fetchStocksData()">🔄 刷新</button>
         </div>
         <div class="stocks-container" id="stocksContainer">
@@ -29,8 +29,9 @@
                 <table class="stocks-table" id="stocksTable">
                     <thead>
                         <tr>
+                            <th>ID</th>
                             <th>類別</th>
-                            <th>數字</th>
+                            <th>數量</th>
                         </tr>
                     </thead>
                     <tbody id="stocksTableBody">
@@ -211,48 +212,53 @@
             stocksTableBody.innerHTML = '';
             stocksTableWrapper.style.display = 'block';
             
-            // Create table rows for category and number
+            // Create table rows for ID, category, and quantity
             dataArray.forEach((row, index) => {
                 // Handle different data formats from Google Sheets
-                let category, number;
+                let id, category, quantity;
                 
                 if (typeof row === 'object' && !Array.isArray(row)) {
                     // Object format from doGet function
-                    // Get all keys to find category and number columns
+                    // Get all keys to find ID, category, and quantity columns
                     const keys = Object.keys(row);
                     
-                    // First column should be category (A, B, C, etc.)
-                    // Second column should be number
-                    if (keys.length >= 2) {
-                        category = row[keys[0]] || row[Object.keys(row)[0]] || '';
-                        number = row[keys[1]] || row[Object.keys(row)[1]] || '';
-                    } else if (keys.length === 1) {
-                        category = row[keys[0]] || '';
-                        number = '';
-                    } else {
-                        // Try common column names
-                        category = row.category || row['category'] || row['類別'] || row.Category || row['Category'] || row[0] || '';
-                        number = row.number || row['number'] || row['數字'] || row.Number || row['Number'] || row[1] || '';
+                    // Try to find ID, category, and quantity by common column names
+                    id = row.ID || row['ID'] || row.id || row['id'] || row['ID'] || row['編號'] || '';
+                    category = row.category || row['category'] || row['類別'] || row.Category || row['Category'] || '';
+                    quantity = row.Quantity || row['Quantity'] || row.quantity || row['quantity'] || row['數量'] || row['Quantity'] || '';
+                    
+                    // If not found by name, use position (first, second, third column)
+                    if (!id && keys.length >= 1) {
+                        id = row[keys[0]] || '';
+                    }
+                    if (!category && keys.length >= 2) {
+                        category = row[keys[1]] || '';
+                    }
+                    if (!quantity && keys.length >= 3) {
+                        quantity = row[keys[2]] || '';
                     }
                 } else if (Array.isArray(row)) {
-                    // Array format: [category, number, ...]
-                    category = row[0] || '';
-                    number = row[1] || '';
+                    // Array format: [ID, category, quantity, ...]
+                    id = row[0] || '';
+                    category = row[1] || '';
+                    quantity = row[2] || '';
                 } else {
+                    id = '';
                     category = '';
-                    number = '';
+                    quantity = '';
                 }
                 
-                // Skip if both are empty
-                if (!category && !number) {
+                // Skip if all are empty
+                if (!id && !category && !quantity) {
                     return;
                 }
                 
                 // Create table row
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
+                    <td class="stock-id">${id}</td>
                     <td class="stock-category">${category}</td>
-                    <td class="stock-number">${number}</td>
+                    <td class="stock-number">${quantity}</td>
                 `;
                 
                 stocksTableBody.appendChild(tr);

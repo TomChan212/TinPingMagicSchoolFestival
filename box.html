@@ -7,6 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>魔法盒子</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
 <body>
     <div class="background-image"></div>
@@ -17,8 +18,14 @@
             <img src="opened.png" alt="Opened Pandora Box" class="theme-image">
         </div>
         <div class="coins-container" id="coinsContainer">
-            <img src="Coins.png" alt="Coins" class="coins-image" id="coinsImage">
-            <img src="gratecoin.png" alt="Gratecoin" class="gratecoin-image" id="gratecoinImage" style="display: none;">
+            <div class="coin-clickable-wrapper" id="coinsWrapper">
+                <img src="Coins.png" alt="Coins" class="coins-image" id="coinsImage">
+                <div class="click-me-text" id="coinsClickText">點擊我</div>
+            </div>
+            <div class="coin-clickable-wrapper" id="gratecoinWrapper" style="display: none;">
+                <img src="gratecoin.png" alt="Gratecoin" class="gratecoin-image" id="gratecoinImage">
+                <div class="click-me-text" id="gratecoinClickText">點擊我</div>
+            </div>
         </div>
         <div class="box-reward-message">
             <h2>🎉 恭喜你！</h2>
@@ -26,6 +33,49 @@
         </div>
         <button class="back-btn" onclick="window.location.href='index.html'">⬅️ 返回</button>
     </div>
+
+    <!-- Confirmation Modal -->
+    <div class="coin-confirm-modal" id="coinConfirmModal">
+        <div class="coin-confirm-content">
+            <h2>確認使用</h2>
+            <p>你確定要使用這個貨幣嗎？</p>
+            <div class="coin-confirm-buttons">
+                <button class="coin-confirm-yes" id="coinConfirmYes">是</button>
+                <button class="coin-confirm-no" id="coinConfirmNo">否</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reward Message Modal -->
+    <div class="coin-reward-modal" id="coinRewardModal">
+        <div class="coin-reward-content">
+            <h2>🎉 恭喜你！</h2>
+            <p class="reward-message">恭喜你獲得 "神秘獎勵，請保持頁面到校長室領取你的禮物"</p>
+            <button class="coin-reward-confirm" id="useRewardBtn">使用</button>
+        </div>
+    </div>
+
+    <!-- QR Scanner Modal -->
+    <div class="scanner-modal" id="scannerModal">
+        <div class="scanner-content">
+            <div class="scanner-header">
+                <h2>掃描二維碼</h2>
+                <button class="close-scanner" id="closeScanner">✕</button>
+            </div>
+            <div id="qr-reader" style="width: 100%;"></div>
+            <p class="scanner-hint">將二維碼對準相機</p>
+        </div>
+    </div>
+
+    <!-- Final Reward Modal -->
+    <div class="coin-reward-modal" id="finalRewardModal">
+        <div class="coin-reward-content">
+            <h2>🎉 恭喜你！</h2>
+            <p class="reward-message" id="finalRewardMessage">恭喜你獲得 items !!! 請示意領取。</p>
+            <button class="coin-reward-confirm" id="finalRewardConfirm">確定</button>
+        </div>
+    </div>
+
     <script>
         // Create celebration effect (confetti and fireworks)
         function createCelebrationEffect() {
@@ -131,6 +181,331 @@
         window.addEventListener('DOMContentLoaded', function() {
             createCelebrationEffect();
             checkAchievementsAndShowRewards();
+            initializeCoinInteractions();
+        });
+
+        // Initialize coin click interactions
+        function initializeCoinInteractions() {
+            const coinsWrapper = document.getElementById('coinsWrapper');
+            const gratecoinWrapper = document.getElementById('gratecoinWrapper');
+            const coinsClickText = document.getElementById('coinsClickText');
+            const gratecoinClickText = document.getElementById('gratecoinClickText');
+
+            // Show floating text on coins
+            if (coinsWrapper && coinsClickText) {
+                coinsClickText.style.opacity = '1';
+            }
+            if (gratecoinWrapper && gratecoinWrapper.style.display !== 'none' && gratecoinClickText) {
+                gratecoinClickText.style.opacity = '1';
+            }
+
+            // Make coins clickable
+            if (coinsWrapper) {
+                coinsWrapper.addEventListener('click', function() {
+                    showCoinConfirmation('coins');
+                });
+            }
+            if (gratecoinWrapper) {
+                gratecoinWrapper.addEventListener('click', function() {
+                    if (gratecoinWrapper.style.display !== 'none') {
+                        showCoinConfirmation('gratecoin');
+                    }
+                });
+            }
+        }
+
+        // Show confirmation modal
+        function showCoinConfirmation(coinType) {
+            const confirmModal = document.getElementById('coinConfirmModal');
+            if (confirmModal) {
+                confirmModal.classList.add('active');
+                confirmModal.dataset.coinType = coinType;
+            }
+        }
+
+        // Close confirmation modal
+        function closeCoinConfirmation() {
+            const confirmModal = document.getElementById('coinConfirmModal');
+            if (confirmModal) {
+                confirmModal.classList.remove('active');
+                delete confirmModal.dataset.coinType;
+            }
+        }
+
+        // Show reward message modal
+        function showRewardMessage() {
+            const rewardModal = document.getElementById('coinRewardModal');
+            if (rewardModal) {
+                rewardModal.classList.add('active');
+            }
+        }
+
+        // Close reward message modal
+        function closeRewardMessage() {
+            const rewardModal = document.getElementById('coinRewardModal');
+            if (rewardModal) {
+                rewardModal.classList.remove('active');
+            }
+        }
+
+        // QR Scanner variables
+        let qrScanner = null;
+
+        // Open QR Scanner
+        function openQRScanner() {
+            const scannerModal = document.getElementById('scannerModal');
+            if (!scannerModal) return;
+
+            scannerModal.classList.add('active');
+            
+            // Initialize QR Scanner
+            qrScanner = new Html5Qrcode("qr-reader");
+            
+            // Get viewport dimensions for responsive QR box
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            const qrBoxSize = Math.min(viewportWidth * 0.8, viewportHeight * 0.5, 300);
+            
+            qrScanner.start(
+                { facingMode: "environment" },
+                {
+                    fps: 10,
+                    qrbox: { width: qrBoxSize, height: qrBoxSize },
+                    aspectRatio: 1.0
+                },
+                (decodedText, decodedResult) => {
+                    handleQRScan(decodedText);
+                },
+                (errorMessage) => {
+                    // Error ignored for continuous scanning
+                }
+            ).catch((err) => {
+                console.error("Unable to start scanning", err);
+                alert('無法啟動相機，請檢查權限設定');
+                closeQRScanner();
+            });
+        }
+
+        // Close QR Scanner
+        function closeQRScanner() {
+            if (qrScanner) {
+                qrScanner.stop().then(() => {
+                    qrScanner.clear();
+                    qrScanner = null;
+                }).catch((err) => {
+                    console.error("Error stopping scanner", err);
+                });
+            }
+            const scannerModal = document.getElementById('scannerModal');
+            if (scannerModal) {
+                scannerModal.classList.remove('active');
+            }
+        }
+
+        // Handle QR scan
+        function handleQRScan(scannedText) {
+            const normalizedText = scannedText.trim().toLowerCase();
+            
+            if (normalizedText === 'magic') {
+                // Close scanner
+                closeQRScanner();
+                
+                // Fetch and show random item (exclude grand prizes)
+                fetchRandomItem(false);
+            } else if (normalizedText === 'supermagic') {
+                // Close scanner
+                closeQRScanner();
+                
+                // Fetch and show random item (include grand prizes)
+                fetchRandomItem(true);
+            } else {
+                alert('無效的二維碼！請掃描正確的魔法二維碼。');
+            }
+        }
+
+        // Grand prize IDs
+        const GRAND_PRIZE_IDS = ['#002', '#003', '#007'];
+        
+        // Fetch random item from Google Sheets
+        async function fetchRandomItem(includeGrandPrizes = false) {
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwAJQgvUBCQ6495CW8QWfFZhRLvHHdep-jNtv7tZ7Ubqc2HxJwQ7pSto0LDC_RrlR8e/exec';
+            
+            try {
+                // Use JSONP to fetch data
+                const timestamp = Date.now();
+                const callbackName = 'handleStocksData_' + timestamp;
+                
+                window[callbackName] = function(data) {
+                    // Clean up
+                    delete window[callbackName];
+                    if (script.parentNode) {
+                        document.head.removeChild(script);
+                    }
+                    
+                    // Process data and select random item
+                    let dataArray = [];
+                    if (Array.isArray(data)) {
+                        dataArray = data;
+                    } else if (data.data && Array.isArray(data.data)) {
+                        dataArray = data.data;
+                    }
+                    
+                    // Filter items where quantity > 0 and create weighted list
+                    const weightedItems = [];
+                    
+                    dataArray.forEach(row => {
+                        let id = '';
+                        let quantity = 0;
+                        let category = '';
+                        
+                        if (typeof row === 'object' && !Array.isArray(row)) {
+                            const keys = Object.keys(row);
+                            id = row.ID || row['ID'] || row.id || row['id'] || row['編號'] || (keys.length >= 1 ? row[keys[0]] : '');
+                            quantity = parseInt(row.Quantity || row['Quantity'] || row.quantity || row['quantity'] || row['數量'] || (keys.length >= 3 ? row[keys[2]] : 0)) || 0;
+                            category = row.category || row['category'] || row['類別'] || (keys.length >= 2 ? row[keys[1]] : '');
+                        } else if (Array.isArray(row)) {
+                            id = row[0] || '';
+                            quantity = parseInt(row[2]) || 0;
+                            category = row[1] || '';
+                        }
+                        
+                        // Check if this is a grand prize
+                        const isGrandPrize = GRAND_PRIZE_IDS.includes(id);
+                        
+                        // Skip if:
+                        // 1. Quantity is 0 or category is empty
+                        // 2. It's a grand prize but includeGrandPrizes is false
+                        // 3. It's not a grand prize but includeGrandPrizes is true (only grand prizes allowed)
+                        if (quantity <= 0 || !category) {
+                            return;
+                        }
+                        
+                        if (isGrandPrize && !includeGrandPrizes) {
+                            // Grand prize but not in supermagic mode - skip
+                            return;
+                        }
+                        
+                        if (!isGrandPrize && includeGrandPrizes) {
+                            // Not a grand prize but in supermagic mode - skip (only grand prizes allowed)
+                            return;
+                        }
+                        
+                        // Add the item to weighted list based on its quantity
+                        // Higher quantity = more entries in the list = higher probability
+                        for (let i = 0; i < quantity; i++) {
+                            weightedItems.push(category);
+                        }
+                    });
+                    
+                    if (weightedItems.length === 0) {
+                        if (includeGrandPrizes) {
+                            showFinalReward('目前沒有可用的大獎');
+                        } else {
+                            showFinalReward('目前沒有可用的物品');
+                        }
+                        return;
+                    }
+                    
+                    // Randomly select one item from weighted list
+                    const randomIndex = Math.floor(Math.random() * weightedItems.length);
+                    const selectedCategory = weightedItems[randomIndex];
+                    
+                    // Show final reward
+                    showFinalReward(selectedCategory);
+                };
+                
+                // Create script tag for JSONP
+                const script = document.createElement('script');
+                script.src = scriptURL + '?action=get&callback=' + callbackName + '&_t=' + timestamp;
+                script.onerror = function() {
+                    delete window[callbackName];
+                    if (script.parentNode) {
+                        script.parentNode.removeChild(script);
+                    }
+                    showFinalReward('無法讀取數據，請稍後再試');
+                };
+                
+                document.head.appendChild(script);
+                
+                // Timeout after 10 seconds
+                setTimeout(() => {
+                    if (window[callbackName]) {
+                        delete window[callbackName];
+                        if (script.parentNode) {
+                            script.parentNode.removeChild(script);
+                        }
+                        showFinalReward('讀取數據超時，請稍後再試');
+                    }
+                }, 10000);
+                
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                showFinalReward('無法讀取數據，請稍後再試');
+            }
+        }
+
+        // Show final reward message
+        function showFinalReward(itemName) {
+            const finalRewardModal = document.getElementById('finalRewardModal');
+            const finalRewardMessage = document.getElementById('finalRewardMessage');
+            
+            if (finalRewardModal && finalRewardMessage) {
+                finalRewardMessage.textContent = `恭喜你獲得 ${itemName} !!! 請示意領取。`;
+                finalRewardModal.classList.add('active');
+            }
+        }
+
+        // Close final reward modal
+        function closeFinalReward() {
+            const finalRewardModal = document.getElementById('finalRewardModal');
+            if (finalRewardModal) {
+                finalRewardModal.classList.remove('active');
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Confirmation modal buttons
+            const coinConfirmYes = document.getElementById('coinConfirmYes');
+            const coinConfirmNo = document.getElementById('coinConfirmNo');
+            
+            if (coinConfirmYes) {
+                coinConfirmYes.addEventListener('click', function() {
+                    closeCoinConfirmation();
+                    showRewardMessage();
+                });
+            }
+            
+            if (coinConfirmNo) {
+                coinConfirmNo.addEventListener('click', function() {
+                    closeCoinConfirmation();
+                });
+            }
+            
+            // Reward message "使用" button
+            const useRewardBtn = document.getElementById('useRewardBtn');
+            if (useRewardBtn) {
+                useRewardBtn.addEventListener('click', function() {
+                    closeRewardMessage();
+                    openQRScanner();
+                });
+            }
+            
+            // Close scanner button
+            const closeScanner = document.getElementById('closeScanner');
+            if (closeScanner) {
+                closeScanner.addEventListener('click', function() {
+                    closeQRScanner();
+                });
+            }
+            
+            // Final reward confirm button
+            const finalRewardConfirm = document.getElementById('finalRewardConfirm');
+            if (finalRewardConfirm) {
+                finalRewardConfirm.addEventListener('click', function() {
+                    closeFinalReward();
+                });
+            }
         });
     </script>
 </body>
