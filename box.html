@@ -18,7 +18,7 @@
             <img src="opened.png" alt="Opened Pandora Box" class="theme-image">
         </div>
         <div class="coins-container" id="coinsContainer">
-            <div class="coin-clickable-wrapper" id="coinsWrapper">
+            <div class="coin-clickable-wrapper" id="coinsWrapper" style="display: none;">
                 <img src="Coins.png" alt="Coins" class="coins-image" id="coinsImage">
                 <div class="click-me-text" id="coinsClickText">點擊我</div>
             </div>
@@ -154,26 +154,72 @@
             const prevAllRocksCollected = localStorage.getItem('prevAllRocksCollected') === 'true';
             const prevAllItemsCollected = localStorage.getItem('prevAllItemsCollected') === 'true';
             
+            // Check if coins are used
+            const coinsUsed = localStorage.getItem('coinsUsed') === 'true';
+            const gratecoinUsed = localStorage.getItem('gratecoinUsed') === 'true';
+            
+            const coinsWrapper = document.getElementById('coinsWrapper');
+            const gratecoinWrapper = document.getElementById('gratecoinWrapper');
             const coinsImage = document.getElementById('coinsImage');
             const gratecoinImage = document.getElementById('gratecoinImage');
             const rewardMessage = document.getElementById('rewardMessage');
+            const coinsClickText = document.getElementById('coinsClickText');
+            const gratecoinClickText = document.getElementById('gratecoinClickText');
             
-            // Always show coins
-            if (coinsImage) coinsImage.style.display = 'block';
-            
-            // Only show gratecoin (特選糧食貨幣) if 探險家 achievement is unlocked
-            if (prevAllItemsCollected) {
-                // 探險家成就解鎖：顯示糧食貨幣和特選糧食貨幣
-                if (gratecoinImage) gratecoinImage.style.display = 'block';
+            // Check if both achievements are completed
+            if (prevAllRocksCollected && prevAllItemsCollected) {
+                // Both achievements: Show only 至尊糧食貨幣
+                if (coinsWrapper) coinsWrapper.style.display = 'none';
+                if (gratecoinWrapper) gratecoinWrapper.style.display = 'block';
                 if (rewardMessage) {
-                    rewardMessage.innerHTML = '你成功打開了魔法盒子，獲得了<span class="special-reward-text">糧食貨幣</span>和<span class="special-reward-text">特選糧食貨幣</span>作為獎勵！';
+                    rewardMessage.innerHTML = '恭喜你完成了 魔法大師和探險家的成就 ！！！<br>獲得了<span class="special-reward-text">至尊糧食貨幣</span>！！<br>請到校長室領取你的獎品。';
+                }
+                
+                // Check if gratecoin is used
+                if (gratecoinUsed) {
+                    markCoinAsUsed('gratecoin');
+                }
+            } else if (prevAllRocksCollected) {
+                // Only 魔法大師成就: Show only 糧食貨幣
+                if (coinsWrapper) coinsWrapper.style.display = 'block';
+                if (gratecoinWrapper) gratecoinWrapper.style.display = 'none';
+                if (rewardMessage) {
+                    rewardMessage.innerHTML = '恭喜你完成了 魔法大師的成就 ！！！<br>獲得了<span class="special-reward-text">魔法糧食貨幣</span>！！<br>請到校長室領取你的獎品。';
+                }
+                
+                // Check if coins is used
+                if (coinsUsed) {
+                    markCoinAsUsed('coins');
                 }
             } else {
-                // Only 魔法大師成就：只顯示糧食貨幣
-                if (gratecoinImage) gratecoinImage.style.display = 'none';
+                // No achievements completed yet
+                if (coinsWrapper) coinsWrapper.style.display = 'none';
+                if (gratecoinWrapper) gratecoinWrapper.style.display = 'none';
                 if (rewardMessage) {
-                    rewardMessage.innerHTML = '你成功打開了魔法盒子，獲得了<span class="special-reward-text">糧食貨幣</span>一枚作的獎勵！';
+                    rewardMessage.innerHTML = '請先完成成就以獲得獎勵！';
                 }
+            }
+        }
+        
+        // Mark coin as used
+        function markCoinAsUsed(coinType) {
+            const coinsWrapper = document.getElementById('coinsWrapper');
+            const gratecoinWrapper = document.getElementById('gratecoinWrapper');
+            const coinsClickText = document.getElementById('coinsClickText');
+            const gratecoinClickText = document.getElementById('gratecoinClickText');
+            
+            if (coinType === 'coins' && coinsWrapper && coinsClickText) {
+                coinsWrapper.style.pointerEvents = 'none';
+                coinsWrapper.style.opacity = '0.6';
+                coinsClickText.textContent = '已使用';
+                coinsClickText.style.opacity = '1';
+                coinsClickText.style.color = '#999';
+            } else if (coinType === 'gratecoin' && gratecoinWrapper && gratecoinClickText) {
+                gratecoinWrapper.style.pointerEvents = 'none';
+                gratecoinWrapper.style.opacity = '0.6';
+                gratecoinClickText.textContent = '已使用';
+                gratecoinClickText.style.opacity = '1';
+                gratecoinClickText.style.color = '#999';
             }
         }
 
@@ -190,22 +236,26 @@
             const gratecoinWrapper = document.getElementById('gratecoinWrapper');
             const coinsClickText = document.getElementById('coinsClickText');
             const gratecoinClickText = document.getElementById('gratecoinClickText');
+            
+            // Check if coins are used
+            const coinsUsed = localStorage.getItem('coinsUsed') === 'true';
+            const gratecoinUsed = localStorage.getItem('gratecoinUsed') === 'true';
 
-            // Show floating text on coins
-            if (coinsWrapper && coinsClickText) {
+            // Show floating text on coins (only if not used)
+            if (coinsWrapper && coinsClickText && !coinsUsed) {
                 coinsClickText.style.opacity = '1';
             }
-            if (gratecoinWrapper && gratecoinWrapper.style.display !== 'none' && gratecoinClickText) {
+            if (gratecoinWrapper && gratecoinWrapper.style.display !== 'none' && gratecoinClickText && !gratecoinUsed) {
                 gratecoinClickText.style.opacity = '1';
             }
 
-            // Make coins clickable
-            if (coinsWrapper) {
+            // Make coins clickable (only if not used)
+            if (coinsWrapper && !coinsUsed) {
                 coinsWrapper.addEventListener('click', function() {
                     showCoinConfirmation('coins');
                 });
             }
-            if (gratecoinWrapper) {
+            if (gratecoinWrapper && !gratecoinUsed) {
                 gratecoinWrapper.addEventListener('click', function() {
                     if (gratecoinWrapper.style.display !== 'none') {
                         showCoinConfirmation('gratecoin');
@@ -219,7 +269,7 @@
             const confirmModal = document.getElementById('coinConfirmModal');
             if (confirmModal) {
                 confirmModal.classList.add('active');
-                confirmModal.dataset.coinType = coinType;
+                currentCoinType = coinType; // Save coin type globally
             }
         }
 
@@ -228,8 +278,8 @@
             const confirmModal = document.getElementById('coinConfirmModal');
             if (confirmModal) {
                 confirmModal.classList.remove('active');
-                delete confirmModal.dataset.coinType;
             }
+            // Don't clear currentCoinType here, it will be cleared after final reward
         }
 
         // Show reward message modal
@@ -250,6 +300,9 @@
 
         // QR Scanner variables
         let qrScanner = null;
+        
+        // Track which coin is currently being used
+        let currentCoinType = null;
 
         // Open QR Scanner
         function openQRScanner() {
@@ -460,6 +513,18 @@
             const finalRewardModal = document.getElementById('finalRewardModal');
             if (finalRewardModal) {
                 finalRewardModal.classList.remove('active');
+            }
+            
+            // Mark the coin as used based on which coin was clicked
+            if (currentCoinType) {
+                if (currentCoinType === 'coins') {
+                    localStorage.setItem('coinsUsed', 'true');
+                    markCoinAsUsed('coins');
+                } else if (currentCoinType === 'gratecoin') {
+                    localStorage.setItem('gratecoinUsed', 'true');
+                    markCoinAsUsed('gratecoin');
+                }
+                currentCoinType = null; // Clear after marking as used
             }
         }
 
