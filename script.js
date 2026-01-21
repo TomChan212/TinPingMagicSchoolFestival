@@ -329,6 +329,10 @@ function resetGame() {
         localStorage.setItem('prevAllRocksCollected', 'false');
         localStorage.setItem('prevAllItemsCollected', 'false');
         
+        // Reset coin usage states (so coins are not marked as used)
+        localStorage.setItem('coinsUsed', 'false');
+        localStorage.setItem('gratecoinUsed', 'false');
+        
         // Update UI
         initializeRocks();
         checkBoxOpening();
