@@ -368,13 +368,31 @@
         function handleQRScan(scannedText) {
             const normalizedText = scannedText.trim().toLowerCase();
             
+            // Check if user has completed both achievements (for supermagic)
+            const prevAllRocksCollected = localStorage.getItem('prevAllRocksCollected') === 'true';
+            const prevAllItemsCollected = localStorage.getItem('prevAllItemsCollected') === 'true';
+            const hasGratecoin = prevAllRocksCollected && prevAllItemsCollected;
+            
             if (normalizedText === 'magic') {
+                // Check if user has gratecoin (completed both achievements)
+                // If has gratecoin, can only use supermagic
+                if (hasGratecoin) {
+                    alert('你已完成兩個成就，只能使用 supermagic 二維碼！');
+                    return; // Don't close scanner, let user try again
+                }
+                
                 // Close scanner
                 closeQRScanner();
                 
                 // Fetch and show random item (exclude grand prizes)
                 fetchRandomItem(false);
             } else if (normalizedText === 'supermagic') {
+                // Check if user has gratecoin (completed both achievements)
+                if (!hasGratecoin) {
+                    alert('只有完成魔法大師和探險家兩個成就才能使用 supermagic！');
+                    return; // Don't close scanner, let user try again
+                }
+                
                 // Close scanner
                 closeQRScanner();
                 
