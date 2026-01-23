@@ -50,7 +50,7 @@
     <div class="coin-reward-modal" id="coinRewardModal">
         <div class="coin-reward-content">
             <h2>🎉 恭喜你！</h2>
-            <p class="reward-message">恭喜你獲得 "神秘獎勵，請保持頁面到校長室領取你的禮物"</p>
+            <p class="reward-message">恭喜你獲得 "神秘獎勵，請<span class="special-reward-text-red">保持頁面</span>到校長室領取你的禮物"</p>
             <button class="coin-reward-confirm" id="useRewardBtn">使用</button>
         </div>
     </div>
@@ -419,25 +419,7 @@
             };
             
             try {
-                // Try using fetch with form data (more reliable for Google Apps Script)
-                const formData = new FormData();
-                formData.append('action', 'update');
-                formData.append('id', itemId);
-                formData.append('quantity', newQuantity.toString());
-                if (remark) {
-                    formData.append('remark', remark);
-                }
-                
-                // First try: Use form data
-                const response = await fetch(scriptURL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    cache: 'no-cache',
-                    body: formData
-                });
-                
-                // Since no-cors doesn't allow reading response, we'll also try JSON
-                // Send JSON request as backup
+                // Send only ONE request using JSON format
                 fetch(scriptURL, {
                     method: 'POST',
                     mode: 'no-cors',
@@ -448,7 +430,7 @@
                     body: JSON.stringify(payload)
                 })
                 .then(() => {
-                    console.log(`✅ 已即時更新 Google Sheets: ${itemId} 的數量為 ${newQuantity}`);
+                    console.log(`✅ 已即時更新 Google Sheets: ${itemId} 的數量為 ${newQuantity}${remark ? ', 備註: ' + remark : ''}`);
                 })
                 .catch(error => {
                     console.error('❌ 更新 Google Sheets 時發生錯誤:', error);
@@ -474,16 +456,6 @@
                 
             } catch (error) {
                 console.error('❌ 更新 Google Sheets 時發生錯誤:', error);
-                // Fallback: Try using image tag method (works even with CORS restrictions)
-                const img = document.createElement('img');
-                img.src = scriptURL + '?action=update&id=' + encodeURIComponent(itemId) + '&quantity=' + encodeURIComponent(newQuantity);
-                img.style.display = 'none';
-                document.body.appendChild(img);
-                setTimeout(() => {
-                    if (img.parentNode) {
-                        img.parentNode.removeChild(img);
-                    }
-                }, 1000);
             }
         }
         

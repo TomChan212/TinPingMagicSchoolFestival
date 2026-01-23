@@ -2175,6 +2175,17 @@ button:active {
     padding: 0 0.2rem;
 }
 
+.special-reward-text-red {
+    font-weight: bold;
+    color: #c62828;
+    text-shadow: 0 0 10px rgba(198, 40, 40, 0.8),
+                 0 0 20px rgba(198, 40, 40, 0.6),
+                 0 0 30px rgba(198, 40, 40, 0.4);
+    animation: textShineRed 2s ease-in-out infinite;
+    display: inline-block;
+    padding: 0 0.2rem;
+}
+
 @keyframes textShine {
     0%, 100% {
         text-shadow: 0 0 10px rgba(106, 27, 154, 0.8),
@@ -2188,6 +2199,22 @@ button:active {
                      0 0 40px rgba(106, 27, 154, 0.6),
                      0 0 50px rgba(106, 27, 154, 0.4);
         color: #8e24aa;
+    }
+}
+
+@keyframes textShineRed {
+    0%, 100% {
+        text-shadow: 0 0 10px rgba(198, 40, 40, 0.8),
+                     0 0 20px rgba(198, 40, 40, 0.6),
+                     0 0 30px rgba(198, 40, 40, 0.4);
+        color: #c62828;
+    }
+    50% {
+        text-shadow: 0 0 20px rgba(198, 40, 40, 1),
+                     0 0 30px rgba(198, 40, 40, 0.8),
+                     0 0 40px rgba(198, 40, 40, 0.6),
+                     0 0 50px rgba(198, 40, 40, 0.4);
+        color: #e53935;
     }
 }
 
