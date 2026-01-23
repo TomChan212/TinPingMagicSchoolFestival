@@ -1007,29 +1007,9 @@ if (typeof Storage !== 'undefined') {
 
 // Open box button
 // Google Apps Script API URL
-const scriptURL = 'https://script.google.com/macros/s/AKfycbz8DWvcfhl0ao0PCJ0DkGLRpKtZ0G89HM1WkJVyZcQfNES5aNHHJ9gAdsVoMbvqcDrJ/exec';
-
-function sendStockData() {
-    const payload = {
-        name: "WaiWai Chan",
-        email: "waiwaichan212@gmail.com",
-        message: "stocks"
-    };
-
-    fetch(scriptURL, {
-        method: 'POST',
-        mode: 'no-cors', // 解決跨域問題
-        cache: 'no-cache',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-    })
-    .then(() => alert("資料已嘗試送出！請檢查試算表。"))
-    .catch(error => console.error('Error!', error.message));
-}
+const scriptURL = 'https://script.google.com/macros/s/AKfycbyzrjCIe0DzHG6czweM9-rpXtC54im6V821ReV3uH0p3wSQnAZIjzE3RPRPZyUhoFZJ/exec';
 
 openBoxButton.addEventListener('click', function() {
-    // Send data to Google Sheets before opening the box
-    sendStockData();
     window.location.href = 'box.html';
 });
 

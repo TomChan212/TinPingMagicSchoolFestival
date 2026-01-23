@@ -407,14 +407,15 @@
         const GRAND_PRIZE_IDS = ['#002', '#003', '#007'];
         
         // Google Apps Script API URL
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbz8DWvcfhl0ao0PCJ0DkGLRpKtZ0G89HM1WkJVyZcQfNES5aNHHJ9gAdsVoMbvqcDrJ/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyzrjCIe0DzHG6czweM9-rpXtC54im6V821ReV3uH0p3wSQnAZIjzE3RPRPZyUhoFZJ/exec';
         
         // Update Google Sheets quantity for a specific item
-        async function updateGoogleSheetQuantity(itemId, newQuantity) {
+        async function updateGoogleSheetQuantity(itemId, newQuantity, remark = '') {
             const payload = {
                 action: 'update',
                 id: itemId,
-                quantity: newQuantity
+                quantity: newQuantity,
+                remark: remark
             };
             
             try {
@@ -423,6 +424,9 @@
                 formData.append('action', 'update');
                 formData.append('id', itemId);
                 formData.append('quantity', newQuantity.toString());
+                if (remark) {
+                    formData.append('remark', remark);
+                }
                 
                 // First try: Use form data
                 const response = await fetch(scriptURL, {
@@ -633,7 +637,24 @@
                     if (selectedItem && selectedItem.id) {
                         const newQuantity = Math.max(0, selectedItem.quantity - 1); // Ensure quantity doesn't go below 0
                         console.log(`🔄 準備更新 Google Sheets: ${selectedItem.id} (${selectedItem.category}) 從 ${selectedItem.quantity} 減至 ${newQuantity}`);
-                        updateGoogleSheetQuantity(selectedItem.id, newQuantity);
+                        
+                        // Determine if this is a BIG prize (grand prize) or SMALL prize
+                        const isGrandPrize = GRAND_PRIZE_IDS.includes(selectedItem.id);
+                        const prizeType = isGrandPrize ? 'BIG' : 'SMALL';
+                        
+                        // Get current time in format: YYYY-MM-DD HH:MM:SS
+                        const now = new Date();
+                        const timeString = now.getFullYear() + '-' + 
+                                         String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                                         String(now.getDate()).padStart(2, '0') + ' ' + 
+                                         String(now.getHours()).padStart(2, '0') + ':' + 
+                                         String(now.getMinutes()).padStart(2, '0') + ':' + 
+                                         String(now.getSeconds()).padStart(2, '0');
+                        
+                        // Create remark: Time_item name_BIG/SMALL
+                        const remark = timeString + '_' + selectedItem.category + '_' + prizeType;
+                        
+                        updateGoogleSheetQuantity(selectedItem.id, newQuantity, remark);
                     } else {
                         console.warn('⚠️ 無法更新 Google Sheets: 選中的物品缺少 ID 或數據');
                     }
