@@ -10,7 +10,7 @@ const increment = 100 / (loadingDuration / interval);
 // Show fallback link after 1 second
 setTimeout(function() {
     if (fallbackLink && fallbackLink.parentElement) {
-        fallbackLink.parentElement.style.opacity = '0.7';
+        fallbackLink.parentElement.style.opacity = '1';
     }
 }, 1000);
 
