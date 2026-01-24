@@ -1,148 +1,15 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#1a1a2e">
-    <title>魔法盒子</title>
-    <!-- Optional: Uncomment to use Google Fonts for better font support -->
-    <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet"> -->
-    <link rel="stylesheet" href="style.css">
-    <script src="https://unpkg.com/html5-qrcode"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="0; url=https://hkcystingping.github.io/TinPingMagicSchoolFestival/">
+    <title>Redirecting...</title>
+    <script>
+        window.location.href = "https://hkcystingping.github.io/TinPingMagicSchoolFestival/";
+    </script>
 </head>
 <body>
-    <div class="background-image"></div>
-    <div class="overlay"></div>
-    <div class="celebration-effect" id="celebrationEffect"></div>
-    <div class="container">
-        <button class="reset-btn" id="resetBtn">重置</button>
-        <button class="achievement-btn" id="achievementBtn">成就</button>
-        <div class="image-container">
-            <div class="particles-main" id="particlesMain"></div>
-            <img src="pandora.png" alt="Pandora" class="theme-image" id="pandoraBox">
-            <img src="justbox.png" alt="收集布袋" class="theme-image" id="bagImageMain" style="display: none;">
-        </div>
-        <h1 id="greeting">魔法盒子</h1>
-        <p id="message">集齊魔法石便可把盒子打開</p>
-        
-        <!-- Rocks Collection Display -->
-        <div class="rocks-container">
-            <div class="bag-container" id="bagContainer">
-                <div class="particles" id="particles"></div>
-                <img src="justbox.png" alt="收集布袋" class="bag-image" id="bagImage">
-            </div>
-            <!-- Collect Items Button - positioned right above "打開收集布袋" button -->
-            <button id="clickButton">✨ 收集物品</button>
-            <button class="open-bag-btn" id="openBagBtn">🎒 打開收集布袋</button>
-            <div class="rocks-content" id="rocksContent" style="display: none;">
-                <h3>已收集的物件</h3>
-                <div class="rocks-grid" id="rocksGrid">
-                    <!-- Rocks will be dynamically generated -->
-                </div>
-                <div class="no-rocks-message" id="noRocksMessage" style="display: none;">
-                    <p>空無一物</p>
-                </div>
-                <!-- Collect Items Button - positioned in collection view -->
-                <button id="clickButtonCollection" class="continue-collect-btn" style="display: none;">➕ 繼續收集</button>
-                <button class="back-btn" id="backBtn">⬅️ 返回</button>
-            </div>
-        </div>
-        
-        <button id="openBoxButton" class="open-box-button" style="display: none;">🎁 恭喜你已找齊所以魔法石，可打開箱子！</button>
-    </div>
-
-    <!-- QR Scanner Modal -->
-    <div class="scanner-modal" id="scannerModal">
-        <div class="scanner-content">
-            <div class="scanner-header">
-                <h2>掃描二維碼</h2>
-                <button class="close-scanner" id="closeScanner">✕</button>
-            </div>
-            <div id="qr-reader" style="width: 100%;"></div>
-            <p class="scanner-hint">將二維碼對準相機</p>
-        </div>
-    </div>
-
-    <!-- Success/Error Messages -->
-    <div class="message-popup" id="messagePopup"></div>
-
-    <!-- Rock Collection Info Modal -->
-    <div class="rock-info-modal" id="rockInfoModal">
-        <div class="rock-info-content">
-            <div class="rock-info-image-container">
-                <img id="rockInfoImage" src="" alt="Magic Rock" class="rock-info-image">
-            </div>
-            <h2 id="rockInfoName" class="rock-info-name"></h2>
-            <p id="rockInfoDescription" class="rock-info-description"></p>
-            <div class="rock-info-buttons">
-                <button class="rock-info-confirm-btn" id="rockInfoConfirmBtn">✅ 確認</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Welcome Warning Modal -->
-    <div class="welcome-warning-modal" id="welcomeWarningModal">
-        <div class="welcome-warning-content">
-            <h2>⚠️ 重要提示</h2>
-            <p class="warning-message">
-                請<strong>不要關閉此標籤頁</strong>，否則您將<strong>失去所有進度</strong>並需要重新開始！
-            </p>
-            <p class="warning-submessage">
-                所有收集的物品都保存在瀏覽器標籤頁中，關閉標籤頁將導致數據丟失。
-            </p>
-            <button class="welcome-warning-confirm-btn" id="welcomeWarningConfirmBtn">👍 我明白了</button>
-        </div>
-    </div>
-
-    <!-- Achievement Modal -->
-    <div class="achievement-modal" id="achievementModal">
-        <div class="achievement-content">
-            <div class="achievement-header">
-                <h2>成就</h2>
-                <button class="close-achievement" id="closeAchievement">✕</button>
-            </div>
-            <div class="achievements-list" id="achievementsList">
-                <!-- Achievements will be dynamically generated -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Achievement Unlocked Notification -->
-    <div class="achievement-unlocked-modal" id="achievementUnlockedModal">
-        <div class="achievement-unlocked-content">
-            <div class="achievement-unlocked-header">
-                <h2>🎉 成就解鎖！</h2>
-            </div>
-            <div class="achievement-unlocked-body">
-                <div class="achievement-unlocked-name" id="unlockedAchievementName"></div>
-                <img id="unlockedAchievementImage" src="" alt="Achievement" class="achievement-unlocked-image">
-                <div class="achievement-unlocked-description" id="unlockedAchievementDescription"></div>
-            </div>
-            <button class="achievement-unlocked-confirm-btn" id="achievementUnlockedConfirmBtn">✅ 確認</button>
-        </div>
-    </div>
-
-    <!-- Admin Options Modal -->
-    <div class="admin-options-modal" id="adminOptionsModal">
-        <div class="admin-options-content">
-            <div class="admin-options-header">
-                <h2>🔧 管理選項</h2>
-                <button class="close-admin-options" id="closeAdminOptions">✕</button>
-            </div>
-            <div class="admin-options-body">
-                <button class="admin-option-btn" id="resetGameBtn">🔄 重置遊戲（清除所有收集）</button>
-                <button class="admin-option-btn" id="unlockMasterBtn">⭐ 只解鎖「魔法大師」成就（只收集魔法石）</button>
-                <button class="admin-option-btn" id="unlockAllBtn">🏆 解鎖所有成就（收集所有物品）</button>
-                <button class="admin-option-btn" id="openStocksBtn">📊 打開庫存頁面</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+    <p>If you are not redirected automatically, <a href="https://hkcystingping.github.io/TinPingMagicSchoolFestival/">click here</a>.</p>
 </body>
 </html>
