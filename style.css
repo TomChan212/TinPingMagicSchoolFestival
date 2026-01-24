@@ -173,21 +173,42 @@ body {
     text-shadow: 
         0 0 10px rgba(255, 255, 255, 1),
         0 0 20px rgba(255, 215, 0, 0.8),
-        0 0 30px rgba(78, 205, 196, 0.6);
+        0 0 30px rgba(78, 205, 196, 0.6),
+        0 0 40px rgba(255, 107, 157, 0.4);
     transition: all 0.3s ease;
     display: inline-block;
     padding: 8px 16px;
     border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    background: rgba(255, 255, 255, 0.1);
+    animation: linkGlow 2s ease-in-out infinite;
+}
+
+@keyframes linkGlow {
+    0%, 100% { 
+        text-shadow: 
+            0 0 10px rgba(255, 255, 255, 1),
+            0 0 20px rgba(255, 215, 0, 0.8),
+            0 0 30px rgba(78, 205, 196, 0.6),
+            0 0 40px rgba(255, 107, 157, 0.4);
+    }
+    50% { 
+        text-shadow: 
+            0 0 15px rgba(255, 255, 255, 1),
+            0 0 30px rgba(255, 215, 0, 1),
+            0 0 45px rgba(78, 205, 196, 0.8),
+            0 0 60px rgba(255, 107, 157, 0.6);
+    }
 }
 
 .fallback-link a:hover {
     color: #ffd700;
     text-shadow: 
-        0 0 10px rgba(255, 215, 0, 0.8),
-        0 0 20px rgba(255, 107, 157, 0.5);
-    border-color: rgba(255, 215, 0, 0.5);
-    background: rgba(255, 215, 0, 0.1);
+        0 0 15px rgba(255, 215, 0, 1),
+        0 0 30px rgba(255, 107, 157, 0.8),
+        0 0 45px rgba(78, 205, 196, 0.6);
+    border-color: rgba(255, 215, 0, 0.7);
+    background: rgba(255, 215, 0, 0.15);
     transform: translateY(-2px);
+    animation: none;
 }
