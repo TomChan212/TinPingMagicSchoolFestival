@@ -154,3 +154,39 @@ body {
     color: #4ecdc4;
     letter-spacing: 2px;
 }
+
+.fallback-link {
+    margin-top: 30px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.fallback-link:hover {
+    opacity: 1;
+}
+
+.fallback-link a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-shadow: 
+        0 0 5px rgba(255, 255, 255, 0.5),
+        0 0 10px rgba(255, 215, 0, 0.3);
+    transition: all 0.3s ease;
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.fallback-link a:hover {
+    color: #ffd700;
+    text-shadow: 
+        0 0 10px rgba(255, 215, 0, 0.8),
+        0 0 20px rgba(255, 107, 157, 0.5);
+    border-color: rgba(255, 215, 0, 0.5);
+    background: rgba(255, 215, 0, 0.1);
+    transform: translateY(-2px);
+}
